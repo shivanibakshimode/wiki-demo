@@ -28,7 +28,6 @@ jobs:
       with:
         repository: shivanibakshimode/wiki-demo.wiki
         fetch-depth: 0
-        path: wiki-demo
     - name: update api.md file and push to remote
       run: |
         touch api.md
