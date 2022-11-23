@@ -23,7 +23,7 @@ jobs:
       run: |
         git config --global user.name "shivanibakshimode"
         git config --global user.email "shivani.bakshi@mode.com"
-    # - name: update api.md file and push to remote
-    - script: |
+    - name: update api.md file and push to remote
+      script: |
         git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
         
