@@ -30,6 +30,8 @@ jobs:
     #     state: directory
     - name: update api.md file and push to remote
       run: |
+        eval $(ssh-agent -s)
+        ssh-add ~/.ssh/id_1396
         git remote set-url origin git@github.com:shivanibakshimode/wiki-demo.wiki.git
         git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
         cd wiki-demo.wiki
