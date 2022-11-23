@@ -30,9 +30,7 @@ jobs:
         fetch-depth: 0
     - name: update api.md file and push to remote
       run: |
-        touch api.md
-        git checkout HEAD^ > api.md
-
-        git add api.md
+        date > api.md
+        git add .
         git commit -m "Updated api.md"
         git push
