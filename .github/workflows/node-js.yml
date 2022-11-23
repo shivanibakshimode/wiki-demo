@@ -33,9 +33,11 @@ jobs:
     - name: update api.md file and push to remote
       run: |
         mkdir wiki
-        touch /wiki/api.md
-        echo Home.md >> /wiki/api.md
+        cd wiki
+        touch api.md
+        echo Home.md >> api.md
 
-        git add /wiki/api.md
+        cd ..
+        git add wiki/api.md
         git commit -m "Updated api.md"
         git push
