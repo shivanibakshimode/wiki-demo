@@ -31,7 +31,7 @@ jobs:
     - name: update api.md file and push to remote
       run: |
         touch api.md
-        echo "More test content" >> api.md
+        echo "More test content...." >> api.md
 
         git add api.md
         git commit -m "Updated api.md with Home.md"
