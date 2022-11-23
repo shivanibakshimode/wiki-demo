@@ -28,10 +28,11 @@ jobs:
       with:
         repository: shivanibakshimode/wiki-demo.wiki
         fetch-depth: 0
+        path: wiki-demo
     - name: update api.md file and push to remote
       run: |
         touch api.md
-        cp https://github.com/shivanibakshimode/wiki-demo/wiki/Home.md api.md
+        echo "More test content" >> api.md
 
         git add api.md
         git commit -m "Updated api.md with Home.md"
