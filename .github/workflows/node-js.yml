@@ -24,16 +24,12 @@ jobs:
         git config --global user.name "shivanibakshimode"
         git config --global user.email "shivani.bakshi@mode.com"
     - name: Extract release version
-      run: echo "RELEASE_VERSION=$(node scripts/extract-release-version.js)" >> $GITHUB_ENV
+      run: echo "RELEASE_VERSION=1.3.4" >> $GITHUB_ENV
     - name: Check out repository code
       uses: actions/checkout@v3
       with:
         repository: shivanibakshimode/wiki-demo.wiki
         fetch-depth: 0
-    - name: Create release tag
-      run: git tag -s -a "${RELEASE_VERSION}"
-    - name: Push git tag
-      run: git push --tags
     - name: Update "${RELEASE_VERSION}".md file and push to remote
       run: |
         touch "${RELEASE_VERSION}".md
