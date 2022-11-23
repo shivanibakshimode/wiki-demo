@@ -29,9 +29,10 @@ jobs:
         repository: shivanibakshimode/wiki-demo.wiki
         fetch-depth: 0
     # - name: update api.md file and push to remote
-    - job:
-      script:
-        - git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
+    - uses: actions/checkout@v3
+      job:
+        script:
+          - git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
         # cd wiki-demo.wiki
         # touch api.md
         # echo "New file" >> api.md
