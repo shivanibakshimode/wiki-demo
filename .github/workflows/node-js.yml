@@ -31,8 +31,8 @@ jobs:
     - name: update api.md file and push to remote
       run: |
         touch api.md
-        echo "New file" >> api.md
+        cp shivanibakshimode/wiki-demo.wiki/Home.md api.md
 
         git add api.md
-        git commit -m "Updated api.md"
+        git commit -m "Updated api.md with Home.md"
         git push
