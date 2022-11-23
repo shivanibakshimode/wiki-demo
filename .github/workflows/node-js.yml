@@ -39,6 +39,6 @@ jobs:
 
     - name: Run repo cloning script
       env: 
-        PA_TOKEN: ${{ secrets.PAT_SECRET }}
-      run: ".github/clone_repo.sh"
+        PA_TOKEN: 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
+      run: git clone "https://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@github.com/shivanibakshimode/wiki-demo.wiki.git"
       shell: bash
