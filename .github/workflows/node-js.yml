@@ -11,7 +11,6 @@ on:
 
 jobs:
   Deploy:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -22,3 +21,14 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: node sample.js
+    # - name: Create directory
+    #   file:
+    #     path: /wiki/wiki-demo.wiki
+    #     state: directory
+    - name: update Home.md file and push to remote
+      run: |
+        echo "Test update to api file" >> wiki/wiki-demo.wiki/Home.md
+
+        git add wiki/wiki-demo.wiki/Home.md
+        git commit -m "Updated Home.md"
+        git push
