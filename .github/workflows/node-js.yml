@@ -33,7 +33,7 @@ jobs:
     - name: Update "${RELEASE_VERSION}".md file and push to remote
       run: |
         touch "${RELEASE_VERSION}".md
-        api.md > "${RELEASE_VERSION}".md
+        echo "I'm new version" >> "${RELEASE_VERSION}".md
         git add "${RELEASE_VERSION}".md
         git commit -m "Updated "${RELEASE_VERSION}".md"
         git push
