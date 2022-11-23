@@ -1,0 +1,1 @@
+git clone "https://"$PA_TOKEN"@github.com/shivanibakshimode/wiki-demo.wiki.git"

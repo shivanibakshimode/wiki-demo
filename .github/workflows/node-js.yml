@@ -23,24 +23,22 @@ jobs:
       run: |
         git config --global user.name "shivanibakshimode"
         git config --global user.email "shivani.bakshi@mode.com"
-    - name: Check out repository code
-      uses: actions/checkout@v3
-      with:
-        repository: shivanibakshimode/wiki-demo.wiki
-        fetch-depth: 0
     # - name: update api.md file and push to remote
-    job:
-      script:
-        - git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
-        
+    #   run: |
+    #     git remote set-url origin git@github.com:shivanibakshimode/wiki-demo.wiki.git
+    #     git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
+    #     cd wiki-demo.wiki
+    #     touch api.md
+    #     echo "New file" >> api.md
 
+    #     git add api.md
+    #     git commit -m "Updated api.md"
+    #     git push
 
-# cd wiki-demo.wiki
-        # touch api.md
-        # echo "New file" >> api.md
+    #     cd ..
 
-        # git add api.md
-        # git commit -m "Updated api.md"
-        # git push
-
-        # cd ..
+    - name: Run repo cloning script
+      env: 
+        PA_TOKEN: ${{ secrets.PAT_SECRET }}
+      run: ".github/clone_repo.sh"
+      shell: bash
