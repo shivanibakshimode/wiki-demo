@@ -38,12 +38,8 @@ jobs:
     #     cd ..
 
     - name: Run repo cloning script
-      env: 
-        PA_TOKEN: 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
       run: |
-        mkdir temp
-        cd temp
-        git clone "https://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@github.com/shivanibakshimode/wiki-demo.wiki.git"
+        git clone "git@github.com/shivanibakshimode/wiki-demo.wiki.git"
         cd wiki-demo.wiki
         touch api.md
         echo "New file" >> api.md
