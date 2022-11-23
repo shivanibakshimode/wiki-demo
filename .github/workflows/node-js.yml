@@ -36,6 +36,6 @@ jobs:
         echo "New file" >> api.md
 
         cd ..
-        git add .
+        git add -A
         git commit -m "Updated api.md"
         git push
