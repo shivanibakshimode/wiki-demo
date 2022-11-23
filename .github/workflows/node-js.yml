@@ -30,7 +30,6 @@ jobs:
     #     state: directory
     - name: update api.md file and push to remote
       run: |
-        git remote set-url origin https://github.com/shivanibakshimode/wiki-demo.git
         git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
         cd wiki-demo.wiki
         touch api.md
