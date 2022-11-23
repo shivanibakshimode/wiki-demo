@@ -1,0 +1,122 @@
+Changes
+### mode/issues#14894: 
+
+Legends gets splitted across multiple layers.
+<img width="838" alt="Screen Shot 2022-11-15 at 7 22 23 PM" src="https://user-images.githubusercontent.com/13236877/201936609-53b0dbca-199a-4f5f-900e-39c1007cc605.png">
+
+### mode/issues#15088:
+
+Select interaction highlights the selected data point and de-highlights others
+<img width="925" alt="image" src="https://user-images.githubusercontent.com/12519292/197839629-e61d046e-b91a-48c5-b68e-b27fc8c566fc.png">
+
+### mode/issues#14461:
+
+Correct series gets highlighted when interacting with null items in legend.
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/35898601/201947577-97510cf4-fa8b-43ff-b42e-ac742f59624d.gif)
+
+### mode/issues#14379:
+
+Multiple issues were fixed as a part of this issue
+* mode/issues#14379
+* mode/issues#14378
+* mode/issues#14545
+Invalids are now grouped as one item in tooltip.
+
+Before:
+<img width="924" alt="image" src="https://user-images.githubusercontent.com/12519292/201950330-2c9496c7-9c70-4699-bfda-8d3012ebb584.png">
+
+After:
+<img width="952" alt="image" src="https://user-images.githubusercontent.com/12519292/201950727-e354fb9a-afbb-48bb-a7a0-a560f76358ed.png">
+
+### mode/issues#14789:
+
+Renders correct user specified domains when `alignZeroLine : false`
+
+### mode/issues#14998:
+
+Added an api to prevent automatic label skipping
+**API**
+
+js
+    canvas.layers([
+    {
+        mark: "arc",
+        encoding: {
+            text: {
+                field: "Sales",
+                removeCollision: false or true
+            }
+        }
+    }
+    ])
+
+If `removeCollision` is false, then the voronoi or thinning will not be applied, and if `removeCollision` is true, it will apply thinning and voronoi.
+
+If the `filter` is used as follows:
+
+js
+canvas.layers([{
+    mark: "arc",
+    encoding: {
+        text: {
+            field: "Sales",
+            filter: () => {
+                return true or false
+            }
+            removeCollision: false or true
+        }
+    }
+}]);
+
+When the `removeCollision` is true, then the filter function will be applied first, then the voronoi will be applied on filtered texts and if `removeCollision` is false, then the filtered text labels will be finalized.
+
+Before:
+<img width="899" alt="Screenshot 2022-11-15 at 7 41 27 PM" src="https://user-images.githubusercontent.com/35898601/201943433-37fdc89b-79c7-46f7-9565-b9b2ab63ee79.png">
+
+After:
+<img width="900" alt="Screenshot 2022-11-15 at 7 41 18 PM" src="https://user-images.githubusercontent.com/35898601/201943455-bf5c0a2b-6b70-44fa-a677-cf6c4dd1fae1.png">
+
+
+### mode/issues#15241:
+
+Multiple issues were fixed under this issue
+* mode/issues#15241
+* mode/issues#15194
+* mode/issues#15192.
+All the above issues are fixed as a part of shared axis initiatives.
+
+### mode/issues#14434:
+
+Added **Custom themeing** support to Muze and moved all overridden css in VE side as a theme in Muze.
+
+**API**
+
+js
+export interface Theme {
+    name: string;
+    className: string;
+    font: {
+            ...FontMetrics
+            components: {
+                axis ? : {
+                    ticks ? : FontMetrics; // Axis ticks
+                    name ? : FontMetrics; // Axis name
+                },
+                facets ? : FontMetrics; // Facet labels
+                textLayer ? : FontMetrics; // Labels of a text encoding.
+            }
+        },
+        loadCSS: (theme: Theme) => void;
+}
+
+export interface FontMetrics {
+    fontSize: string;
+    fontFamily: string;
+    fontWeight: string;
+    fontStyle: string;
+
+}
+
+ **Migration Doc** : https://coda.io/d/Muze-Visualization_dyOMIfy8VBY/Mode-Muze-CSS-Migration-Guide_supeJ
+
+ **Feature Doc**: https://coda.io/d/Muze-Visualization_dyOMIfy8VBY/Themes-in-Muze_sunD-#_luZ0F
