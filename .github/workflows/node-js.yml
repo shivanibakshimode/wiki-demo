@@ -32,7 +32,7 @@ jobs:
     #     state: directory
     - name: update api.md file and push to remote
       run: |
-        mkdir wiki
+        mkdir -p wiki
         cd wiki
         touch api.md
         cp Home.md api.md
