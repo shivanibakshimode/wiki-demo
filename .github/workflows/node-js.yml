@@ -32,6 +32,7 @@ jobs:
     #     state: directory
     - name: update api.md file and push to remote
       run: |
+        touch /wiki/api.md
         echo Home.md >> /wiki/api.md
 
         git add /wiki/api.md
