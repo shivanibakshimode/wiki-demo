@@ -32,7 +32,6 @@ jobs:
       with:
         repository: shivanibakshimode/wiki-demo.wiki
         fetch-depth: 0
-        path: temp/wiki-demo.wiki
     - name: Update "${RELEASE_VERSION}".md file and push to remote
       run: |
         touch "${RELEASE_VERSION}".md
