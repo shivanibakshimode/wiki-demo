@@ -19,10 +19,27 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: node sample.js
+
+    - name: Check out repository code
+      uses: actions/setup-node@v3
+      with:
+        repository: https://github.com/shivanibakshimode/wiki-demo.wiki.git
+        fetch-depth: 0
+    # - name: Import GPG key
+    #   id: import_gpg
+    #   uses: ./.github/actions/import-gpg
+    #   env:
+    #     GPG_PRIVATE_KEY: ${{ secrets.WORKFLOW_ACTION_GPG_PRIVATE_KEY }}
+    #     PASSPHRASE: ${{ secrets.WORKFLOW_ACTION_GPG_PASSPHRASE }}
     - name: Set git configs
       run: |
-        git config --global user.name "shivanibakshimode"
-        git config --global user.email "shivani.bakshi@mode.com"
+        git config --global user.name "${GIT_USER_NAME}"
+        git config --global user.email "${GIT_USER_EMAIL}"
+
+    # - name: Set git configs
+    #   run: |
+    #     git config --global user.name "shivanibakshimode"
+    #     git config --global user.email "shivani.bakshi@mode.com"
     # - name: Create directory
     #   uses: actions/checkout@v3
     #   file:
