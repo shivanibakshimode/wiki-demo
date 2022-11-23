@@ -21,18 +21,18 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: node sample.js
-    # - name: Create directory
-    #   file:
-    #     path: /wiki/wiki-demo.wiki
-    #     state: directory
     - name: Set git configs
       run: |
         git config --global user.name "shivanibakshimode"
         git config --global user.email "shivani.bakshi@mode.com"
-    - name: update Home.md file and push to remote
+    - name: Create directory
+      file:
+        path: /wiki/api.md
+        state: directory
+    - name: update api.md file and push to remote
       run: |
-        echo "Test update to api file" >> Home.md
+        echo "Test update to api file" >> /wiki/api.md
 
-        git add Home.md
-        git commit -m "Updated Home.md"
+        git add .
+        git commit -m "Updated api.md"
         git push
