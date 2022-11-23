@@ -28,8 +28,6 @@ jobs:
       with:
         repository: shivanibakshimode/wiki-demo.wiki
         fetch-depth: 0
-        github-server-url: git@github.com:shivanibakshimode/wiki-demo.wiki.git
-    
     
     
     
