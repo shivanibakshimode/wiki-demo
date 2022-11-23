@@ -35,7 +35,7 @@ jobs:
         mkdir wiki
         cd wiki
         touch api.md
-        echo Home.md >> api.md
+        cp Home.md api.md
 
         cd ..
         git add wiki/api.md
