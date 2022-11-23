@@ -28,10 +28,10 @@ jobs:
       with:
         repository: shivanibakshimode/wiki-demo.wiki
         fetch-depth: 0
-    - name: update api.md file and push to remote
-      uses: actions/setup-node@v3
-      script: |
-        git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
+    # - name: update api.md file and push to remote
+    job:
+      script:
+        - git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
         
 
 
