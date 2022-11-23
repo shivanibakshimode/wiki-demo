@@ -30,7 +30,7 @@ jobs:
     #     state: directory
     - name: update api.md file and push to remote
       run: |
-        git clone https://github.com/shivanibakshimode/wiki-demo.wiki.git
+        git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
         cd wiki-demo.wiki
         touch api.md
         echo "New file" >> api.md
@@ -38,3 +38,5 @@ jobs:
         git add api.md
         git commit -m "Updated api.md"
         git push
+
+        cd ..
