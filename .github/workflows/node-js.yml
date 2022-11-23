@@ -28,16 +28,16 @@ jobs:
       with:
         repository: shivanibakshimode/wiki-demo.wiki
         fetch-depth: 0
-    - name: update api.md file and push to remote
-      run: |
-        git remote set-url origin git@github.com:shivanibakshimode/wiki-demo.wiki.git
-        git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
-        cd wiki-demo.wiki
-        touch api.md
-        echo "New file" >> api.md
+    # - name: update api.md file and push to remote
+    - job:
+      script:
+        - git clone git@github.com:shivanibakshimode/wiki-demo.wiki.git
+        # cd wiki-demo.wiki
+        # touch api.md
+        # echo "New file" >> api.md
 
-        git add api.md
-        git commit -m "Updated api.md"
-        git push
+        # git add api.md
+        # git commit -m "Updated api.md"
+        # git push
 
-        cd ..
+        # cd ..
