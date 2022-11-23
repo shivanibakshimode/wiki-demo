@@ -26,12 +26,9 @@ jobs:
     #     path: /wiki/wiki-demo.wiki
     #     state: directory
     - name: Set git configs
-      env:
-        GIT_USER_NAME: ${{ secrets.WORKFLOW_ACTION_GIT_USER_NAME }}
-        GIT_USER_EMAIL: ${{ secrets.WORKFLOW_ACTION_GIT_USER_EMAIL }}
       run: |
-        git config --global user.name "${GIT_USER_NAME}"
-        git config --global user.email "${GIT_USER_EMAIL}"
+        git config --global user.name "shivanibakshimode"
+        git config --global user.email "shivani.bakshi@mode.com"
     - name: update Home.md file and push to remote
       run: |
         echo "Test update to api file" >> Home.md
