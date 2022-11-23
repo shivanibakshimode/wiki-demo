@@ -35,7 +35,6 @@ jobs:
         touch api.md
         echo "New file" >> api.md
 
-        cd ..
-        git add -A
+        git add api.md
         git commit -m "Updated api.md"
         git push
