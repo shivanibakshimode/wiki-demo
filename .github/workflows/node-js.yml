@@ -36,6 +36,6 @@ jobs:
         echo "New file" >> api.md
 
         cd ..
-        git add wiki-demo.wiki/api.md
+        git add api.md
         git commit -m "Updated api.md"
         git push
