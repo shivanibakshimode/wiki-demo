@@ -31,7 +31,7 @@ jobs:
     - name: Extract release version
       run: echo "RELEASE_VERSION=$(node scripts/extract-release-version.js)" >> $GITHUB_ENV
     - name: Create release tag
-      run: git tag -s -a "${RELEASE_VERSION}".1
+      run: git tag -s -a "${RELEASE_VERSION}"
     - name: Push git tag
       run: git push --tags
     - name: Update "${RELEASE_VERSION}".md file and push to remote
