@@ -28,9 +28,16 @@ jobs:
       with:
         repository: shivanibakshimode/wiki-demo.wiki
         fetch-depth: 0
-    - name: update api.md file and push to remote
+    - name: Extract release version
+      run: echo "RELEASE_VERSION=$(node scripts/extract-release-version.js)" >> $GITHUB_ENV
+    - name: Create release tag
+      run: git tag -s -a "${RELEASE_VERSION}" -F ./release-notes.txt
+    - name: Push git tag
+      run: git push --tags
+    - name: Update "${RELEASE_VERSION}".md file and push to remote
       run: |
-        date > api.md
-        git add .
-        git commit -m "Updated api.md"
+        touch "${RELEASE_VERSION}".md
+        api.md > "${RELEASE_VERSION}".md
+        git add "${RELEASE_VERSION}".md
+        git commit -m "Updated "${RELEASE_VERSION}".md"
         git push
