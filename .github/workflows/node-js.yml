@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -26,6 +25,7 @@ jobs:
         git config --global user.name "shivanibakshimode"
         git config --global user.email "shivani.bakshi@mode.com"
     - name: Create directory
+      uses: actions/checkout@v3
       file:
         path: /wiki/api.md
         state: directory
