@@ -27,8 +27,8 @@ jobs:
     #     state: directory
     - name: update Home.md file and push to remote
       run: |
-        echo "Test update to api file" >> wiki-demo/Home.md
+        echo "Test update to api file" >> Home.md
 
-        git add wiki-demo/Home.md
+        git add Home.md
         git commit -m "Updated Home.md"
         git push
