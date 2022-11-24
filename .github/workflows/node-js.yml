@@ -12,9 +12,7 @@ on:
 jobs:
   Deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -27,6 +25,10 @@ jobs:
         git config --global user.email "shivani.bakshi@mode.com"
     - name: Extract release version
       run: echo "RELEASE_VERSION=$(node scripts/extract-release-version.js)" >> $GITHUB_ENV
+    - name: Setup Github CLI
+      env:
+        GITHUB_TOKEN_ENV_VALUE: ${{ secrets.WORKFLOW_ACTION_GITHUB_TOKEN }}
+      run: echo "GITHUB_TOKEN=$(echo $GITHUB_TOKEN_ENV_VALUE)" >> $GITHUB_ENV
     - name: Check out repository code
       uses: actions/checkout@v3
       with:
