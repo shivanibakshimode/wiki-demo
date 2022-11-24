@@ -20,6 +20,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: node sample.js
+    # - name: Check out repository code
+    #   uses: actions/checkout@v3
+    #   with:
+    #     repository: mode/muze
+    #     fetch-depth: 0
     - name: Set git configs
       run: |
         git config --global user.name "shivanibakshimode"
@@ -38,7 +43,7 @@ jobs:
     - name: Update "${RELEASE_VERSION}".md file and push to remote
       run: |
         touch "${RELEASE_VERSION}".md
-        cat api.md > "${RELEASE_VERSION}".md
+        cat ./api.md > "${RELEASE_VERSION}".md
         git add "${RELEASE_VERSION}".md
         git commit -m "Updated "${RELEASE_VERSION}".md"
         git push
