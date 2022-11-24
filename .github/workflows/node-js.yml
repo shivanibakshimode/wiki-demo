@@ -32,6 +32,15 @@ jobs:
       with:
         repository: shivanibakshimode/wiki-demo.wiki
         fetch-depth: 0
+    - name: Run read-md action
+      id: md-data
+      uses: actions/checkout@v3
+      with:
+        file: './api.md'
+        key-path: '["runs", "using"]'
+
+    - name: Display read-yaml output
+      run: echo "${{ steps.yaml-data.outputs.data }}"
     - name: Update "${RELEASE_VERSION}".md file and push to remote
       run: |
         touch "${RELEASE_VERSION}".md
