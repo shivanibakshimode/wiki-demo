@@ -35,6 +35,12 @@ jobs:
       env:
         GITHUB_TOKEN_ENV_VALUE: ${{ secrets.WORKFLOW_ACTION_GITHUB_TOKEN }}
       run: echo "GITHUB_TOKEN=$(echo $GITHUB_TOKEN_ENV_VALUE)" >> $GITHUB_ENV
+    - name: Remove and update wiki submodule
+      run: |
+      git rm --cached wiki-demo.wiki
+      rm -rf wiki-demo.wiki
+      rm -rf .git/modules/wiki-demo.wiki
+      git submodule add https://github.com/shivanibakshimode/wiki-demo.wiki.git
     - name: Check out repository code
       uses: actions/checkout@v3
       with:
