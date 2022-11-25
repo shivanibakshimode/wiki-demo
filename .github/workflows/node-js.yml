@@ -43,7 +43,7 @@ jobs:
     - name: Update "${RELEASE_VERSION}".md file and push to remote
       run: |
         touch "${RELEASE_VERSION}".md
-        cat ./wiki-demo.wiki/api.md > "${RELEASE_VERSION}".md
+        cat api.md > "${RELEASE_VERSION}".md
         git add "${RELEASE_VERSION}".md
         git commit -m "Updated "${RELEASE_VERSION}".md"
         git push
