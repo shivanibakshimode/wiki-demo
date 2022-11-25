@@ -35,17 +35,16 @@ jobs:
       env:
         GITHUB_TOKEN_ENV_VALUE: ${{ secrets.WORKFLOW_ACTION_GITHUB_TOKEN }}
       run: echo "GITHUB_TOKEN=$(echo $GITHUB_TOKEN_ENV_VALUE)" >> $GITHUB_ENV
-    - name: Update "${RELEASE_VERSION}".md file
-      run: |
-        touch "${RELEASE_VERSION}".md
-        cat ./api.md > "${RELEASE_VERSION}".md
     - name: Check out repository code
       uses: actions/checkout@v3
       with:
         repository: shivanibakshimode/wiki-demo.wiki
         fetch-depth: 0
-    - name: Push to remote
+        path: wiki-demo.wiki
+    - name: Update "${RELEASE_VERSION}".md file and push to remote
       run: |
+        touch "${RELEASE_VERSION}".md
+        cat ./api.md > "${RELEASE_VERSION}".md
         git add "${RELEASE_VERSION}".md
         git commit -m "Updated "${RELEASE_VERSION}".md"
         git push
