@@ -35,7 +35,7 @@ jobs:
       env:
         GITHUB_TOKEN_ENV_VALUE: ${{ secrets.WORKFLOW_ACTION_GITHUB_TOKEN }}
       run: echo "GITHUB_TOKEN=$(echo $GITHUB_TOKEN_ENV_VALUE)" >> $GITHUB_ENV
-    - name: Create a temp md file
+    - name: Create a runner.temp file
       run: |
         touch ${{ runner.temp }}/temp_api.md
         cat ./api.md > ${{ runner.temp }}/temp_api.md
