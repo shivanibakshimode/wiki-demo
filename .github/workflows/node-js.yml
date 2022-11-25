@@ -41,6 +41,7 @@ jobs:
         rm -rf wiki-demo.wiki
         rm -rf .git/modules/wiki-demo.wiki
         git submodule add https://github.com/shivanibakshimode/wiki-demo.wiki.git
+        pwd
     - name: Check out repository code
       uses: actions/checkout@v3
       with:
@@ -49,7 +50,8 @@ jobs:
     - name: Update "${RELEASE_VERSION}".md file and push to remote
       run: |
         touch "${RELEASE_VERSION}".md
-        cat api.md > "${RELEASE_VERSION}".md
+        pwd
+        cat ../api.md > "${RELEASE_VERSION}".md
         git add "${RELEASE_VERSION}".md
         git commit -m "Updated "${RELEASE_VERSION}".md"
         git push
