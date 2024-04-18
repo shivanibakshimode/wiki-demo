@@ -87,26 +87,11 @@ jobs:
             const markdownContent = JSON.parse(JSON.stringify(${{ steps.read-report.outputs.summaryContent }}))
 
             let markdown = '# Code Coverage Report\n\n';
-            Object.keys(markdownContent).forEach((filePath) => {
-                console.log("filePath: ", filePath)
-                const fileCoverage = markdownContent[filePath];
-
-                console.log("fileCoverage: ", fileCoverage)
-                const fileName = filePath.split("/").pop();
-                markdown += `## ${fileName}\n\n`;
-
-                Object.keys(fileCoverage).forEach((coverageType) => {
-                  markdown += `# ${coverageType}\n`;
-
-                  const parameters = fileCoverage[coverageType];
-                  console.log("parameters: ", parameters)
-                  if(typeof parameters === "object") {
-                    markdown += `| Total ${parameters.total} | Covered ${parameters.covered} | Skipped ${parameters.skipped} | Percentage ${parameters.pct} |\n`;
-                  }
-                })
-
-                markdown += '\n';
-            });
+            
+            markdown += '| File  | Statements | Branches | Functions | Lines |';
+            markdown += '\n';
+            markdown += '| :---: | :--------: | :------: | :-------: | :---: |';
+            markdown += '\n';
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -114,3 +99,14 @@ jobs:
               repo: context.repo.repo,
               body: markdown
             })
+
+
+
+# Object.keys(fileCoverage).forEach((coverageType) => {
+#       markdown += `${coverageType}\n`;
+
+#       const parameters = fileCoverage[coverageType];
+#       if(typeof parameters === "object") {
+#         markdown += `| Total ${parameters.total} | Covered ${parameters.covered} | Skipped ${parameters.skipped} | Percentage **${parameters.pct}% |\n`;
+#       }
+#     })
