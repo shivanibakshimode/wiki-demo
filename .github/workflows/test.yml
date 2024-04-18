@@ -82,21 +82,19 @@ jobs:
             const markdownContent = '${{ steps.read-report.outputs.summaryContent }}';
 
             console.log("markdownContent: ", markdownContent, typeof markdownContent)
-            const parsedContent = JSON.parse(JSON.stringify(markdownContent));
+            const parsedContent = JSON.parse(markdownContent);
             console.log("parsedContent: ", parsedContent)
 
-            let markdown = '# Istanbul Coverage Report\n\n';
-            Object.keys(parsedContent).forEach(filePath => {
+            let markdown = '# Code Coverage Report\n\n';
+            Object.keys(parsedContent).forEach((filePath) => {
                 console.log("filePath: ", filePath)
                 const fileCoverage = parsedContent[filePath];
                 console.log("fileCoverage: ", fileCoverage)
                 markdown += `## ${filePath}\n\n`;
 
-                if(fileCoverage["lines"]) {
-                  Object.keys(fileCoverage["lines"]).forEach((val) => {
-                    markdown += `| Total ${val.total} | Covered ${val.covered} | Skipped ${val.skipped} | Percentage ${val.pct} |\n`;
-                  })
-                }
+                Object.keys(fileCoverage["lines"]).forEach((val) => {
+                  markdown += `| Total ${val.total} | Covered ${val.covered} | Skipped ${val.skipped} | Percentage ${val.pct} |\n`;
+                })
 
                 markdown += '\n';
             });
@@ -107,38 +105,6 @@ jobs:
               repo: context.repo.repo,
               body: markdown
             })
-
-      # - name: Generate Coverage Report
-      #   run: node scripts/parse-coverage.js
-
-      # - name: Add comment to PR
-      #   id: create-comment
-      #   uses: actions/github-script@v5
-      #   with:
-      #     script: |
-      #       let markdown = '# Istanbul Coverage Report\n\n';
-      #       // Loop through each file in the coverage data
-      #       Object.keys(coverageData).forEach(filePath => {
-      #           const fileCoverage = coverageData[filePath];
-      #           markdown += `## ${filePath}\n\n`;
-
-      #           // Loop through each line in the file
-      #           fileCoverage.forEach((lineCoverage, lineNumber) => {
-      #               const line = lineNumber + 1;
-      #               const coveragePercentage = lineCoverage === 0 ? '0%' : '100%';
-      #               const status = lineCoverage === 0 ? 'Not covered' : 'Covered';
-
-      #               markdown += `| Line ${line} | ${status} | ${coveragePercentage} |\n`;
-      #           });
-
-      #           markdown += '\n';
-      #       });
-      #       github.rest.issues.createComment({
-      #         issue_number: context.issue.number,
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         body: markdown
-      #       })
 
       # fileCoverage["functions"]
       #           fileCoverage["statements"]
