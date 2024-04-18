@@ -93,20 +93,18 @@ jobs:
             markdown += '| :---: | :--------: | :------: | :-------: | :---: |';
             markdown += '\n';
 
-            markdown += '\n';
-
             const coverageTypes = markdown.split('|').slice(2, 6).map(v => v.toLowerCase().trim());
             Object.keys(markdownContent).forEach((filePath) => {
                 const fileCoverage = markdownContent[filePath];
 
                 const fileName = filePath.split("/").pop();
-                markdown += `| #### ${fileName}`;
+                markdown += `| ${fileName}`;
 
                 Object.keys(fileCoverage).forEach((coverageType) => {
                   if(coverageTypes.includes(coverageType)) {
                     const parameters = fileCoverage[coverageType];
                     if(typeof parameters === "object") {
-                      markdown += ` | ${parameters.covered} / (${parameters.total} - ${parameters.skipped}), **${parameters.pct}% | `;
+                      markdown += ` | ${parameters.covered} / (${parameters.total - parameters.skipped}), ${parameters.pct}% | `;
                     } 
                   }
                 })
