@@ -97,7 +97,8 @@ jobs:
 
                 Object.keys(fileCoverage).forEach((val) => {
                   console.log("val: ", val)
-                  const lines = val.lines;
+                  const lines = fileCoverage["lines"];
+                  console.log("lines: ", lines)
                   if(typeof lines === "object") {
                     markdown += `| Total ${lines.total} | Covered ${lines.covered} | Skipped ${lines.skipped} | Percentage ${lines.pct} |\n`;
                   }
