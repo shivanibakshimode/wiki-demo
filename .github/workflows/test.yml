@@ -65,14 +65,44 @@ jobs:
       - name: Report Coverage
         shell: bash
         run: |
-          value=`cat ./coverage/index.html`
+          value=`cat ./coverage/coverage-summary.json`
           echo The result is $value
 
       - name: Read Coverage Report
         id: read-report
         run: |
-          reportContent=$(cat ./coverage/coverage-final.json)
-          echo "::set-output name=reportContent::$reportContent"
+          summaryContent=$(cat ./coverage/coverage-summary.json)
+          echo "::set-output name=summaryContent::$summaryContent"
+
+      - name: Convert JSON to Markdown
+        id: convert-to-md
+        run: |
+          summaryContent="${{ steps.read-summary.outputs.summaryContent }}"
+          // Parse the JSON content
+          const summaryData = JSON.parse(summaryContent);
+
+          // Define a function to convert JSON data to Markdown
+          function jsonToMarkdown(data) {
+            let markdown = '';
+
+            for (const key in data) {
+              markdown += `### ${key}\n\n`;
+
+              if (typeof data[key] === 'object') {
+                markdown += jsonToMarkdown(data[key]);
+              } else {
+                markdown += `${key}: ${data[key]}\n\n`;
+              }
+            }
+
+            return markdown;
+          }
+
+          // Convert JSON data to Markdown
+          const markdownContent = jsonToMarkdown(summaryData);
+
+          // Set the Markdown content as output
+          echo "::set-output name=result::$markdownContent"
 
       - name: Create PR Comment
         id: create-comment
@@ -81,13 +111,12 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             // Get the coverage report content from the previous step's output
-            const reportContent = '${{ steps.read-report.outputs.reportContent }}';
-            console.log("reportContent: ", reportContent);
+            const markdownContent = '${{ steps.convert-to-md.outputs.markdownContent }}';
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: reportContent
+              body: markdownContent
             })
 
       # - name: Generate Coverage Report
