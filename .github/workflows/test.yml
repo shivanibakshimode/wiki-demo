@@ -101,22 +101,22 @@ jobs:
 
                 const statementsParameters = fileCoverage["statements"];
                 if(typeof statementsParameters === "object") {
-                  markdown += `| **${statementsParameters.pct}%** \`${statementsParameters.covered} / ${statementsParameters.total - statementsParameters.skipped}\` `;
+                  markdown += `| **${statementsParameters.pct}%**   \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\` `;
                 }
 
                 const branchesParameters = fileCoverage["branches"];
                 if(typeof branchesParameters === "object") {
-                  markdown += `| **${branchesParameters.pct}%** \`${branchesParameters.covered} / ${branchesParameters.total - branchesParameters.skipped}\` `;
+                  markdown += `| **${branchesParameters.pct}%**   \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\` `;
                 }
                 
                 const functionsParameters = fileCoverage["functions"];
                 if(typeof functionsParameters === "object") {
-                  markdown += `| **${functionsParameters.pct}%** \`${functionsParameters.covered} / ${functionsParameters.total - functionsParameters.skipped}\` `;
+                  markdown += `| **${functionsParameters.pct}%**   \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\` `;
                 }
 
                 const linesParameters = fileCoverage["lines"];
                 if(typeof linesParameters === "object") {
-                  markdown += `| **${linesParameters.pct}%** \`${linesParameters.covered} / ${linesParameters.total - linesParameters.skipped}\` `;
+                  markdown += `| **${linesParameters.pct}%**   \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\` `;
                 }
 
                 markdown += '\n';
