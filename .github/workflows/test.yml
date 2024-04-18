@@ -72,6 +72,11 @@ jobs:
         id: read-report
         run: |
           summaryContent=$(cat ./coverage/coverage-summary.json)
+          # the following lines are only required for multi line json
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
           echo "::set-output name=summaryContent::$summaryContent"
 
       - name: Create PR Comment
@@ -79,7 +84,8 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            console.log("here: ", ${{ steps.read-report.outputs.summaryContent }});
+            echo "${{ fromJSON(steps.read-report.outputs.summaryContent) }}"
+
       # fileCoverage["functions"]
       #           fileCoverage["statements"]
       #           fileCoverage["branches"]
