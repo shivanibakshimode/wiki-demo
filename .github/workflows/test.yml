@@ -72,12 +72,20 @@ jobs:
         run: node scripts/parse-coverage.js
 
       - name: Add comment to PR
+        id: create-comment
         uses: actions/github-script@v5
         with:
           script: |
+            const fs = require('fs');
+            const { context, github } = require('@actions/github');
+
+            // Read the coverage report markdown file
+            const reportContent = fs.readFileSync('coverage-report.md', 'utf8');
+
+            // Post the markdown content as a comment on the pull request
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: markdown
+              body: reportContent
             })

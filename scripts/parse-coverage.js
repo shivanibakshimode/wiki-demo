@@ -1,5 +1,5 @@
 import fs from "fs";
-import coverageData from './coverage/coverage-final.json';
+import coverageData from '../coverage/coverage-final.json';
 
 // Function to convert coverage data to Markdown
 function generateCoverageMarkdown(coverageData) {
