@@ -56,8 +56,8 @@ jobs:
     # if: "!startsWith(github.event.pull_request.title, 'Update')"
 
     steps:
-      - name: "PR title"
-        run: echo "PR title: ${{ github.event.pull_request.title }}"
+      - name: PR title
+        run: echo "${{ github.event.pull_request.title }}"
 
       # - name: Add comment to PR
       #   uses: actions/github-script@v5
