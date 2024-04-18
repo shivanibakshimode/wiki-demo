@@ -87,27 +87,37 @@ jobs:
             const markdownContent = JSON.parse(JSON.stringify(${{ steps.read-report.outputs.summaryContent }}))
 
             let markdown = '# Code Coverage Report\n\n';
-            
+
             markdown += '| File  | Statements | Branches | Functions | Lines |';
             markdown += '\n';
             markdown += '| :---: | :--------: | :------: | :-------: | :---: |';
             markdown += '\n';
 
-            const coverageTypes = markdown.split('|').slice(2, 6).map(v => v.toLowerCase().trim());
             Object.keys(markdownContent).forEach((filePath) => {
                 const fileCoverage = markdownContent[filePath];
 
                 const fileName = filePath.split("/").pop();
                 markdown += `| ${fileName}`;
 
-                Object.keys(fileCoverage).forEach((coverageType) => {
-                  if(coverageTypes.includes(coverageType)) {
-                    const parameters = fileCoverage[coverageType];
-                    if(typeof parameters === "object") {
-                      markdown += ` | ${parameters.covered} / (${parameters.total - parameters.skipped}), ${parameters.pct}% | `;
-                    } 
-                  }
-                })
+                const statementsParameters = fileCoverage["statements"];
+                if(typeof statementsParameters === "object") {
+                  markdown += ` | ${statementsParameters.covered} / ${statementsParameters.total - statementsParameters.skipped}, ${statementsParameters.pct < 50 ? \color{red}statementsParameters.pct : \color{green}statementsParameters.pct}% | `;
+                }
+
+                const branchesParameters = fileCoverage["branches"];
+                if(typeof branchesParameters === "object") {
+                  markdown += ` | ${branchesParameters.covered} / ${branchesParameters.total - branchesParameters.skipped}, ${branchesParameters.pct}% | `;
+                }
+
+                const functionsParameters = fileCoverage["functions"];
+                if(typeof functionsParameters === "object") {
+                  markdown += ` | ${functionsParameters.covered} / ${functionsParameters.total - functionsParameters.skipped}, ${functionsParameters.pct}% | `;
+                }
+
+                const linesParameters = fileCoverage["lines"];
+                if(typeof linesParameters === "object") {
+                  markdown += ` | ${linesParameters.covered} / ${linesParameters.total - linesParameters.skipped}, ${linesParameters.pct}% | `;
+                }
 
                 markdown += '\n';
             });
@@ -118,25 +128,3 @@ jobs:
               repo: context.repo.repo,
               body: markdown
             })
-
-
-
-# Object.keys(fileCoverage).forEach((coverageType) => {
-#       markdown += `${coverageType}\n`;
-
-#       const parameters = fileCoverage[coverageType];
-#       if(typeof parameters === "object") {
-#         markdown += `| Total ${parameters.total} | Covered ${parameters.covered} | Skipped ${parameters.skipped} | Percentage **${parameters.pct}% |\n`;
-#       }
-#     })
-
-# Object.keys(markdownContent).forEach((filePath) => {
-            #     const fileName = filePath.split("/").pop();
-            #     markdown += `| #### ${fileName} | `;
-            # });
-
-            # markdown += '\n';
-
-# Object.keys(markdownContent).forEach((filePath) => {
-#                 markdown += '| :---: |';
-#             });
