@@ -87,7 +87,7 @@ jobs:
             const markdownContent = JSON.parse(JSON.stringify(${{ steps.read-report.outputs.summaryContent }}))
 
             let markdown = '# Code Coverage Report\n\n';
-
+            
             markdown += '| File  | Statements | Branches | Functions | Lines |';
             markdown += '\n';
             markdown += '| :---: | :--------: | :------: | :-------: | :---: |';
@@ -101,22 +101,22 @@ jobs:
 
                 const statementsParameters = fileCoverage["statements"];
                 if(typeof statementsParameters === "object") {
-                  markdown += ` | ${statementsParameters.covered} / ${statementsParameters.total - statementsParameters.skipped}, ${statementsParameters.pct < 50 ? \color{red}statementsParameters.pct : \color{green}statementsParameters.pct}% | `;
+                  markdown += ` | ${statementsParameters.covered} / ${statementsParameters.total - statementsParameters.skipped}, **${statementsParameters.pct}%** | `;
                 }
 
                 const branchesParameters = fileCoverage["branches"];
                 if(typeof branchesParameters === "object") {
-                  markdown += ` | ${branchesParameters.covered} / ${branchesParameters.total - branchesParameters.skipped}, ${branchesParameters.pct}% | `;
+                  markdown += ` | ${branchesParameters.covered} / ${branchesParameters.total - branchesParameters.skipped}, **${branchesParameters.pct}%** | `;
                 }
 
                 const functionsParameters = fileCoverage["functions"];
                 if(typeof functionsParameters === "object") {
-                  markdown += ` | ${functionsParameters.covered} / ${functionsParameters.total - functionsParameters.skipped}, ${functionsParameters.pct}% | `;
+                  markdown += ` | ${functionsParameters.covered} / ${functionsParameters.total - functionsParameters.skipped}, **${functionsParameters.pct}%** | `;
                 }
 
                 const linesParameters = fileCoverage["lines"];
                 if(typeof linesParameters === "object") {
-                  markdown += ` | ${linesParameters.covered} / ${linesParameters.total - linesParameters.skipped}, ${linesParameters.pct}% | `;
+                  markdown += ` | ${linesParameters.covered} / ${linesParameters.total - linesParameters.skipped}, **${linesParameters.pct}%** | `;
                 }
 
                 markdown += '\n';
