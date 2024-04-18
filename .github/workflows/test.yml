@@ -95,8 +95,12 @@ jobs:
                 console.log("fileCoverage: ", fileCoverage)
                 markdown += `## ${filePath}\n\n`;
 
-                Object.keys(fileCoverage["lines"]).forEach((val) => {
-                  markdown += `| Total ${val.total} | Covered ${val.covered} | Skipped ${val.skipped} | Percentage ${val.pct} |\n`;
+                Object.keys(fileCoverage).forEach((val) => {
+                  console.log("val: ", val)
+                  const lines = val.lines;
+                  if(typeof lines === "object") {
+                    markdown += `| Total ${lines.total} | Covered ${lines.covered} | Skipped ${lines.skipped} | Percentage ${lines.pct} |\n`;
+                  }
                 })
 
                 markdown += '\n';
