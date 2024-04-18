@@ -69,7 +69,7 @@ jobs:
           echo The result is $value
 
       - name: Generate Coverage Report
-        run: node parse-coverage.js
+        run: node scripts/parse-coverage.js
 
       - name: Add comment to PR
         uses: actions/github-script@v5
