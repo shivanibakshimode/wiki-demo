@@ -79,7 +79,7 @@ jobs:
         run: |
           summaryContent="${{ steps.read-report.outputs.summaryContent }}"
           // Parse the JSON content
-          const summaryData = JSON.parse(summaryContent);
+          const summaryData = JSON.parse(`${summaryContent}`);
 
           // Define a function to convert JSON data to Markdown
           function jsonToMarkdown(data) {
@@ -88,10 +88,10 @@ jobs:
             for (const key in data) {
               markdown += `### ${key}\n\n`;
 
-              if(key === "total") {
-                markdown += `${key}: ${data[key]}\n\n`;
+              if (typeof data[key] === 'object') {
+                markdown += jsonToMarkdown(data[key]);
               } else {
-                break;
+                markdown += `${key}: ${data[key]}\n\n`;
               }
             }
 
