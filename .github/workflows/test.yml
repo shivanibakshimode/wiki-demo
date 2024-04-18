@@ -93,6 +93,27 @@ jobs:
             markdown += '| :---: | :--------: | :------: | :-------: | :---: |';
             markdown += '\n';
 
+            markdown += '\n';
+
+            Object.keys(markdownContent).forEach((filePath) => {
+                const fileCoverage = markdownContent[filePath];
+
+                const fileName = filePath.split("/").pop();
+                markdown += `| #### ${fileName}`;
+
+                Object.keys(fileCoverage).forEach((coverageType) => {
+                  console.log("coverageType: ", coverageType, markdown.split('|').toLowerCase())
+                  if(coverageType === markdown.split('|').toLowerCase()) {
+                    const parameters = fileCoverage[coverageType];
+                    if(typeof parameters === "object") {
+                      markdown += ` | ${parameters.covered} / (${parameters.total} - ${parameters.skipped}), **${parameters.pct}% | `;
+                    } 
+                  }
+                })
+
+                markdown += '\n';
+            });
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -110,3 +131,14 @@ jobs:
 #         markdown += `| Total ${parameters.total} | Covered ${parameters.covered} | Skipped ${parameters.skipped} | Percentage **${parameters.pct}% |\n`;
 #       }
 #     })
+
+# Object.keys(markdownContent).forEach((filePath) => {
+            #     const fileName = filePath.split("/").pop();
+            #     markdown += `| #### ${fileName} | `;
+            # });
+
+            # markdown += '\n';
+
+# Object.keys(markdownContent).forEach((filePath) => {
+#                 markdown += '| :---: |';
+#             });
