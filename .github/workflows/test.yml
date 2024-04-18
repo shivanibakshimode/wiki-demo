@@ -77,7 +77,7 @@ jobs:
       - name: Convert JSON to Markdown
         id: convert-to-md
         run: |
-          summaryContent="${{ steps.read-summary.outputs.summaryContent }}"
+          summaryContent="${{ steps.read-report.outputs.summaryContent }}"
           // Parse the JSON content
           const summaryData = JSON.parse(summaryContent);
 
