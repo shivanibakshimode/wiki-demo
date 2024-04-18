@@ -78,8 +78,9 @@ jobs:
         id: convert-to-md
         run: |
           summaryContent="${{ steps.read-report.outputs.summaryContent }}"
+          let jsonContent = JSON.stringify(summaryContent); 
           // Parse the JSON content
-          const summaryData = JSON.parse(`${summaryContent}`);
+          const summaryData = JSON.parse(jsonContent);
 
           // Define a function to convert JSON data to Markdown
           function jsonToMarkdown(data) {
