@@ -56,12 +56,14 @@ jobs:
     if: "!startsWith(github.event.pull_request.title, 'Feature')"
 
     steps:
-      - uses: actions/github-script@v5
+      - name: Add comment to PR
+        uses: actions/github-script@v5
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            const existingPR = pulls.data[0];
             github.rest.issues.createComment({
-              issue_number: context.issue.number,
+              issue_number: existingPR.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: 'Test comment!'
