@@ -95,7 +95,7 @@ jobs:
 
             markdown += '\n';
 
-            const coverageTypes = markdown.split('|').slice(2, 6).map(v => v.toLowerCase()).trim();
+            const coverageTypes = markdown.split('|').slice(2, 6).map(v => v.toLowerCase().trim());
             Object.keys(markdownContent).forEach((filePath) => {
                 const fileCoverage = markdownContent[filePath];
 
