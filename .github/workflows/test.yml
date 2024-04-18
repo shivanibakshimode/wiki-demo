@@ -57,27 +57,19 @@ jobs:
 
     steps:
       - name: "PR title"
-        run: echo ${{ github.event.pull_request.title }}
+        run: echo "PR title: ${{ github.event.pull_request.title }}"
 
-      - name: Add comment to PR
-        uses: actions/github-script@v5
-        with:
-          # github-token: ${{secrets.GITHUB_TOKEN}}
-          # script: |
-          #   github.rest.issues.createComment({
-          #     issue_number: context.issue.number,
-          #     owner: context.repo.owner,
-          #     repo: context.repo.repo,
-          #     body: 'Test comment!'
-          #   })
-
-          script: |
-            gh api \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/shivanibakshimode/wiki-demo/pulls/1
-
-
+      # - name: Add comment to PR
+      #   uses: actions/github-script@v5
+      #   with:
+      #     # github-token: ${{secrets.GITHUB_TOKEN}}
+      #     script: |
+      #       github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: 'Test comment!'
+      #       })
     # runs-on: ubuntu-latest
 
     # permissions:
