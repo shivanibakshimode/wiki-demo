@@ -66,7 +66,7 @@ jobs:
         shell: bash
         run: |
           value=`cat ./coverage/coverage-summary.json`
-          echo The result is Object.keys($value).length
+          echo The result is $value
 
       - name: Read Coverage Report
         id: read-report
