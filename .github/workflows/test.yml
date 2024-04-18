@@ -82,34 +82,38 @@ jobs:
       - name: Create PR Comment
         id: create-comment
         uses: actions/github-script@v5
-        with:
-          script: |
-            const markdownContent = `${{ toJson(steps.read-report.outputs.summaryContent) }}`;
+        env:
+          JSON: ${{ steps.read-report.outputs.summaryContent }}
+        run: |
+          echo "$JSON"
+        # with:
+        #   script: |
+        #     const markdownContent = '${{ toJson(steps.read-report.outputs.summaryContent) }}';
 
-            console.log("markdownContent: ", markdownContent, typeof markdownContent)
-            const parsedContent = JSON.parse(markdownContent);
-            console.log("parsedContent: ", parsedContent)
+        #     console.log("markdownContent: ", markdownContent, typeof markdownContent)
+        #     const parsedContent = JSON.parse(markdownContent);
+        #     console.log("parsedContent: ", parsedContent)
 
-            let markdown = '# Code Coverage Report\n\n';
-            Object.keys(markdownContent).forEach((filePath) => {
-                console.log("filePath: ", filePath)
-                const fileCoverage = markdownContent[filePath];
-                console.log("fileCoverage: ", fileCoverage)
-                markdown += `## ${filePath}\n\n`;
+        #     let markdown = '# Code Coverage Report\n\n';
+        #     Object.keys(markdownContent).forEach((filePath) => {
+        #         console.log("filePath: ", filePath)
+        #         const fileCoverage = markdownContent[filePath];
+        #         console.log("fileCoverage: ", fileCoverage)
+        #         markdown += `## ${filePath}\n\n`;
 
-                Object.keys(fileCoverage["lines"]).forEach((val) => {
-                  markdown += `| Total ${val.total} | Covered ${val.covered} | Skipped ${val.skipped} | Percentage ${val.pct} |\n`;
-                })
+        #         Object.keys(fileCoverage["lines"]).forEach((val) => {
+        #           markdown += `| Total ${val.total} | Covered ${val.covered} | Skipped ${val.skipped} | Percentage ${val.pct} |\n`;
+        #         })
 
-                markdown += '\n';
-            });
+        #         markdown += '\n';
+        #     });
 
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: markdown
-            })
+        #     github.rest.issues.createComment({
+        #       issue_number: context.issue.number,
+        #       owner: context.repo.owner,
+        #       repo: context.repo.repo,
+        #       body: markdown
+        #     })
 
       # fileCoverage["functions"]
       #           fileCoverage["statements"]
