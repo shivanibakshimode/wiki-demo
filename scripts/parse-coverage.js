@@ -1,7 +1,5 @@
-import { writeFileSync } from "fs";
-
-// Read Istanbul JSON coverage report
-const coverageData = require('./coverage/coverage-final.json');
+import fs from "fs";
+import coverageData from './coverage/coverage-final.json';
 
 // Function to convert coverage data to Markdown
 function generateCoverageMarkdown(coverageData) {
@@ -31,6 +29,6 @@ function generateCoverageMarkdown(coverageData) {
 const markdownContent = generateCoverageMarkdown(coverageData);
 
 // Write Markdown content to file
-writeFileSync('coverage-report.md', markdownContent);
+fs.writeFileSync('coverage-report.md', markdownContent);
 
 console.log('Coverage report generated successfully.');
