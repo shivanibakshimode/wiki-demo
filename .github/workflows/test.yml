@@ -95,6 +95,7 @@ jobs:
 
             markdown += '\n';
 
+            const coverageTypes = markdown.split('|').slice(2, 6).map(v => v.toLowerCase()).trim();
             Object.keys(markdownContent).forEach((filePath) => {
                 const fileCoverage = markdownContent[filePath];
 
@@ -102,8 +103,7 @@ jobs:
                 markdown += `| #### ${fileName}`;
 
                 Object.keys(fileCoverage).forEach((coverageType) => {
-                  console.log("coverageType: ", coverageType, markdown.split('|').toLowerCase())
-                  if(coverageType === markdown.split('|').toLowerCase()) {
+                  if(coverageTypes.includes(coverageType)) {
                     const parameters = fileCoverage[coverageType];
                     if(typeof parameters === "object") {
                       markdown += ` | ${parameters.covered} / (${parameters.total} - ${parameters.skipped}), **${parameters.pct}% | `;
