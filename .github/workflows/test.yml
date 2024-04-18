@@ -81,10 +81,14 @@ jobs:
           script: |
             const markdownContent = '${{ steps.read-report.outputs.summaryContent }}';
 
-            console.log("markdownContent: ", markdownContent)
+            console.log("markdownContent: ", markdownContent, typeof markdownContent)
+            const parsedContent = JSON.parse(JSON.stringify(markdownContent));
+            console.log("parsedContent: ", parsedContent)
+
             let markdown = '# Istanbul Coverage Report\n\n';
-            Object.keys(markdownContent).forEach(filePath => {
-                const fileCoverage = markdownContent[filePath];
+            Object.keys(parsedContent).forEach(filePath => {
+                console.log("filePath: ", filePath)
+                const fileCoverage = parsedContent[filePath];
                 console.log("fileCoverage: ", fileCoverage)
                 markdown += `## ${filePath}\n\n`;
 
