@@ -86,21 +86,22 @@ jobs:
           script: |
             const markdownContent = JSON.parse(JSON.stringify(${{ steps.read-report.outputs.summaryContent }}))
 
-            console.log("markdownContent: ", markdownContent, typeof markdownContent)
-
             let markdown = '# Code Coverage Report\n\n';
             Object.keys(markdownContent).forEach((filePath) => {
                 console.log("filePath: ", filePath)
                 const fileCoverage = markdownContent[filePath];
-                console.log("fileCoverage: ", fileCoverage)
-                markdown += `## ${filePath}\n\n`;
 
-                Object.keys(fileCoverage).forEach((val) => {
-                  console.log("val: ", val)
-                  const lines = fileCoverage["lines"];
-                  console.log("lines: ", lines)
-                  if(typeof lines === "object") {
-                    markdown += `| Total ${lines.total} | Covered ${lines.covered} | Skipped ${lines.skipped} | Percentage ${lines.pct} |\n`;
+                console.log("fileCoverage: ", fileCoverage)
+                const fileName = filePath.split("/").pop();
+                markdown += `## ${fileName}\n\n`;
+
+                Object.keys(fileCoverage).forEach((coverageType) => {
+                  markdown += `# ${coverageType}\n`;
+
+                  const parameters = fileCoverage[coverageType];
+                  console.log("parameters: ", parameters)
+                  if(typeof parameters === "object") {
+                    markdown += `| Total ${parameters.total} | Covered ${parameters.covered} | Skipped ${parameters.skipped} | Percentage ${parameters.pct} |\n`;
                   }
                 })
 
@@ -113,17 +114,3 @@ jobs:
               repo: context.repo.repo,
               body: markdown
             })
-
-      # fileCoverage["functions"]
-      #           fileCoverage["statements"]
-      #           fileCoverage["branches"]
-
-      #           if(typeof fileCoverage === "object") {
-      #             Object.keys(fileCoverage).forEach((lineCoverage, lineNumber) => {
-      #               const line = lineNumber + 1;
-      #               const coveragePercentage = lineCoverage === 0 ? '0%' : '100%';
-      #               const status = lineCoverage === 0 ? 'Not covered' : 'Covered';
-
-      #               markdown += `| Line ${line} | ${status} | ${coveragePercentage} |\n`;
-      #           });
-      #           }
