@@ -84,9 +84,9 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const markdownContent = '${{ toJson(steps.read-report.outputs.summaryContent) }}';
+            const markdownContent = ${{ toJson(steps.read-report.outputs.summaryContent) }};
 
-            console.log("markdownContent: ", markdownContent)
+            console.log("markdownContent: ", markdownContent, typeof markdownContent, Object.keys(markdownContent).length);
             
 
       # fileCoverage["functions"]
