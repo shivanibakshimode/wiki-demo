@@ -81,28 +81,8 @@ jobs:
           // Parse the JSON content
           const summaryData = JSON.parse(summaryContent);
 
-          // Define a function to convert JSON data to Markdown
-          function jsonToMarkdown(data) {
-            let markdown = '';
-
-            for (const key in data) {
-              markdown += `### ${key}\n\n`;
-
-              if (typeof data[key] === 'object') {
-                markdown += jsonToMarkdown(data[key]);
-              } else {
-                markdown += `${key}: ${data[key]}\n\n`;
-              }
-            }
-
-            return markdown;
-          }
-
-          // Convert JSON data to Markdown
-          const markdownContent = jsonToMarkdown(summaryData);
-
           // Set the Markdown content as output
-          echo "::set-output name=result::$markdownContent"
+          echo "::set-output name=markdownContent::$summaryData"
 
       - name: Create PR Comment
         id: create-comment
