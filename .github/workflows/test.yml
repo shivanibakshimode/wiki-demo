@@ -82,27 +82,13 @@ jobs:
           script: |
             const markdownContent = '${{ steps.read-report.outputs.summaryContent }}';
 
-            let markdown = '# Istanbul Coverage Report\n\n';
-            Object.keys(markdownContent).forEach(filePath => {
-                const fileCoverage = markdownContent[filePath];
-                markdown += `## ${filePath}\n\n`;
-
-                fileCoverage.forEach((lineCoverage, lineNumber) => {
-                    const line = lineNumber + 1;
-                    const coveragePercentage = lineCoverage === 0 ? '0%' : '100%';
-                    const status = lineCoverage === 0 ? 'Not covered' : 'Covered';
-
-                    markdown += `| Line ${line} | ${status} | ${coveragePercentage} |\n`;
-                });
-
-                markdown += '\n';
-            });
+            console.log("mark: ", markdownContent);
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: markdown
+              body: markdownContent
             })
 
       # - name: Generate Coverage Report
