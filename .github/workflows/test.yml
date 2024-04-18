@@ -86,8 +86,8 @@ jobs:
           script: |
             const markdownContent = ${{ toJson(steps.read-report.outputs.summaryContent) }};
 
-            console.log("markdownContent: ", markdownContent, Object.keys(markdownContent).length)
-            # const parsedContent = JSON.parse(JSON.stringify(markdownContent));
+            console.log("markdownContent: ", markdownContent)
+            # const parsedContent = JSON.parse(markdownContent);
             # console.log("parsedContent: ", parsedContent)
 
             let markdown = '# Code Coverage Report\n\n';
