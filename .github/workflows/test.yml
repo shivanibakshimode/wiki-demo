@@ -67,6 +67,7 @@ jobs:
         run: |
           value=`cat ./coverage/index.html`
           echo The result is $value
+          echo "Coverage=$value" >> $GITHUB_ENV
 
       - name: Add comment to PR
         uses: actions/github-script@v5
@@ -76,5 +77,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Test comment!'
+              body: ${{ env.Coverage }}
             })
