@@ -79,11 +79,10 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            console.log("here: ", ${{ steps.read-report.outputs.summaryContent }});
-            const markdownContent = JSON.stringify(${{ steps.read-report.outputs.summaryContent }});
+            const markdownContent = ${{ toJSON(steps.read-report.outputs.summaryContent) }};
 
             console.log("markdownContent: ", markdownContent, Object.keys(markdownContent).length)
-            const parsedContent = JSON.parse(markdownContent);
+            const parsedContent = JSON.parse(JSON.stringify(markdownContent));
             console.log("parsedContent: ", parsedContent)
 
             let markdown = '# Code Coverage Report\n\n';
