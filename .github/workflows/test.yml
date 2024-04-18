@@ -80,8 +80,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { context, github } = require('@actions/github');
-
             // Get the coverage report content from the previous step's output
             const reportContent = '${{ steps.read-report.outputs.reportContent }}';
 
