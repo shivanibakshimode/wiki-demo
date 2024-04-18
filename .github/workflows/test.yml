@@ -62,30 +62,81 @@ jobs:
       - name: PR title
         run: echo "${{ github.event.pull_request.title }}"
 
-      - name: "Report Coverage"
+      - name: Report Coverage
         shell: bash
         run: |
           value=`cat ./coverage/index.html`
           echo The result is $value
 
-      - name: Generate Coverage Report
-        run: node scripts/parse-coverage.js
+      - name: Read Coverage Report
+        id: read-report
+        run: |
+          reportContent=$(cat ./coverage/coverage-final.json)
+          echo "::set-output name=reportContent::$reportContent"
 
-      - name: Add comment to PR
+      - name: Create PR Comment
         id: create-comment
-        uses: actions/github-script@v5
+        uses: actions/github-script@v4
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const fs = require('fs');
             const { context, github } = require('@actions/github');
 
-            // Read the coverage report markdown file
-            const reportContent = fs.readFileSync('coverage-report.md', 'utf8');
+            // Get the coverage report content from the previous step's output
+            const reportContent = '${{ steps.read-report.outputs.reportContent }}';
 
-            // Post the markdown content as a comment on the pull request
+            let markdown = '# Istanbul Coverage Report\n\n';
+            // Loop through each file in the coverage data
+            Object.keys(reportContent).forEach(filePath => {
+                const fileCoverage = reportContent[filePath];
+                markdown += `## ${filePath}\n\n`;
+
+                // Loop through each line in the file
+                fileCoverage.forEach((lineCoverage, lineNumber) => {
+                    const line = lineNumber + 1;
+                    const coveragePercentage = lineCoverage === 0 ? '0%' : '100%';
+                    const status = lineCoverage === 0 ? 'Not covered' : 'Covered';
+
+                    markdown += `| Line ${line} | ${status} | ${coveragePercentage} |\n`;
+                });
+
+                markdown += '\n';
+            });
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: reportContent
+              body: markdown
             })
+
+      # - name: Generate Coverage Report
+      #   run: node scripts/parse-coverage.js
+
+      # - name: Add comment to PR
+      #   id: create-comment
+      #   uses: actions/github-script@v5
+      #   with:
+      #     script: |
+      #       let markdown = '# Istanbul Coverage Report\n\n';
+      #       // Loop through each file in the coverage data
+      #       Object.keys(coverageData).forEach(filePath => {
+      #           const fileCoverage = coverageData[filePath];
+      #           markdown += `## ${filePath}\n\n`;
+
+      #           // Loop through each line in the file
+      #           fileCoverage.forEach((lineCoverage, lineNumber) => {
+      #               const line = lineNumber + 1;
+      #               const coveragePercentage = lineCoverage === 0 ? '0%' : '100%';
+      #               const status = lineCoverage === 0 ? 'Not covered' : 'Covered';
+
+      #               markdown += `| Line ${line} | ${status} | ${coveragePercentage} |\n`;
+      #           });
+
+      #           markdown += '\n';
+      #       });
+      #       github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: markdown
+      #       })
