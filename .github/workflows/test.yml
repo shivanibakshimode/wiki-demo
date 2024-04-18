@@ -81,14 +81,18 @@ jobs:
           script: |
             const markdownContent = '${{ steps.read-report.outputs.summaryContent }}';
 
+            console.log("markdownContent: ", markdownContent)
             let markdown = '# Istanbul Coverage Report\n\n';
             Object.keys(markdownContent).forEach(filePath => {
                 const fileCoverage = markdownContent[filePath];
+                console.log("fileCoverage: ", fileCoverage)
                 markdown += `## ${filePath}\n\n`;
 
-                Object.keys(fileCoverage["lines"]).forEach((val) => {
-                  markdown += `| Total ${val.total} | Covered ${val.covered} | Skipped ${val.skipped} | Percentage ${val.pct} |\n`;
-                })
+                if(fileCoverage["lines"]) {
+                  Object.keys(fileCoverage["lines"]).forEach((val) => {
+                    markdown += `| Total ${val.total} | Covered ${val.covered} | Skipped ${val.skipped} | Percentage ${val.pct} |\n`;
+                  })
+                }
 
                 markdown += '\n';
             });
@@ -131,3 +135,17 @@ jobs:
       #         repo: context.repo.repo,
       #         body: markdown
       #       })
+
+      # fileCoverage["functions"]
+      #           fileCoverage["statements"]
+      #           fileCoverage["branches"]
+
+      #           if(typeof fileCoverage === "object") {
+      #             Object.keys(fileCoverage).forEach((lineCoverage, lineNumber) => {
+      #               const line = lineNumber + 1;
+      #               const coveragePercentage = lineCoverage === 0 ? '0%' : '100%';
+      #               const status = lineCoverage === 0 ? 'Not covered' : 'Covered';
+
+      #               markdown += `| Line ${line} | ${status} | ${coveragePercentage} |\n`;
+      #           });
+      #           }
