@@ -82,13 +82,13 @@ jobs:
           script: |
             const markdownContent = '${{ steps.read-report.outputs.summaryContent }}';
 
-            console.log("mark: ", markdownContent);
+            let markdown = '# Istanbul Coverage Report\n\n';
 
-            await github.rest.issues.createComment({
+            github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: markdownContent
+              body: markdown
             })
 
       # - name: Generate Coverage Report
