@@ -57,6 +57,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - run: |
+          echo ${{ github.actor }}
+          echo ${{ github.triggering_actor }}
+          echo ${{ github.event.comment.user.login }}
       - name: Create/Update PR Comment
         id: create-update-comment
         uses: actions/github-script@v5
@@ -64,7 +68,7 @@ jobs:
           script: |
             const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
 
-            let markdown = `<details open>\n`
+            let markdown = `<details>\n`
             markdown += '<summary>\n\n### Code Coverage Report\n\n</summary>\n\n';
             
             markdown += '| File  | Statements | Branches | Functions | Lines |';
