@@ -62,6 +62,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
+            console.log("context.repo.repo: ", context.repo.repo);
             const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
 
             let markdown = '# Code Coverage Report\n\n';
@@ -71,38 +72,39 @@ jobs:
 
             const statementsParameters = fileCoverage["statements"];
             if(typeof statementsParameters === "object") {
-              markdown += `**${statementsParameters.pct}%**   Statements:   \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\` `;
+              markdown += `**${statementsParameters.pct}%** &nbsp;Statements: \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\`&nbsp;&nbsp; `;
             }
 
             const branchesParameters = fileCoverage["branches"];
             if(typeof branchesParameters === "object") {
-              markdown += `**${branchesParameters.pct}%**   Branches:   \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\` `;
+              markdown += `**${branchesParameters.pct}%** &nbsp;Branches: \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\`&nbsp;&nbsp; `;
             }
             
             const functionsParameters = fileCoverage["functions"];
             if(typeof functionsParameters === "object") {
-              markdown += `**${functionsParameters.pct}%**   Functions:   \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\` `;
+              markdown += `**${functionsParameters.pct}%** &nbsp;Functions: \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\`&nbsp;&nbsp; `;
             }
 
             const linesParameters = fileCoverage["lines"];
             if(typeof linesParameters === "object") {
-              markdown += `**${linesParameters.pct}%**   Lines:   \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\` `;
+              markdown += `**${linesParameters.pct}%** &nbsp;Lines: \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\`&nbsp;&nbsp; `;
             }
             markdown += '\n';
 
             markdown += `<details>\n`;
-            markdown += '<summary>\n\n### Files Code Coverage\n\n</summary>\n\n';
+            markdown += '<summary>\n\n### File Report\n\n</summary>\n\n';
 
             markdown += '| File  | Statements | Branches | Functions | Lines |';
             markdown += '\n';
             markdown += '| :---: | :--------: | :------: | :-------: | :---: |';
             markdown += '\n';
-            
+
             Object.keys(markdownContent).forEach((filePath) => {
                 const fileCoverage = markdownContent[filePath];
 
-                if(filePath !== "total") {
-                  markdown += `| ${filePath} `;
+                const fileName = filePath.split('wiki-demo').pop();
+                if(fileName !== "total") {
+                  markdown += `| ${fileName} `;
 
                   const statementsParameters = fileCoverage["statements"];
                   if(typeof statementsParameters === "object") {
