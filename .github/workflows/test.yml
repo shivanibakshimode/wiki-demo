@@ -62,19 +62,10 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            let commentToUpdate;
-
-            console.log("print: ", context.payload.pull_request);
-            if (context.issue.number.comments) {
-              commentToUpdate = context.issue.number.comments.filter((comment) => {
-                return comment.author === "github-actions[bot]"
-              });
-            }
-
             const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
 
             let markdown = `<details open>\n`
-            markdown += '<summary>\n###Code Coverage Report\n</summary>\n\n';
+            markdown += '<summary>\n\n### Code Coverage Report\n\n</summary>\n\n';
             
             markdown += '| File  | Statements | Branches | Functions | Lines |';
             markdown += '\n';
