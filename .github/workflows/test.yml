@@ -64,6 +64,11 @@ jobs:
           script: |
             let commentToUpdate;
 
+            github.rest.issues.getComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            })
+
             console.log("print: ", context.payload.pull_request, context.payload.pull_request.comments, context.payload.comments);
             if (context.issue.number.comments) {
               commentToUpdate = context.issue.number.comments.filter((comment) => {
@@ -112,5 +117,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: markdown
+              body: <details>markdown</details>
             })
