@@ -64,7 +64,7 @@ jobs:
           script: |
             let commentToUpdate;
 
-            console.log("print: ", context.repo, context.issue, context.payload);
+            console.log("print: ", context.payload.pull_request, context.payload.pull_request.comments, context.payload.comments);
             if (context.issue.number.comments) {
               commentToUpdate = context.issue.number.comments.filter((comment) => {
                 return comment.author === "github-actions[bot]"
