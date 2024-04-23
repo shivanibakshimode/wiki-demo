@@ -62,6 +62,15 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
+            let commentToUpdate;
+
+            console.log("print: ", context.repo, context.issue, context.payload);
+            if (context.issue.number.comments) {
+              commentToUpdate = context.issue.number.comments.filter((comment) => {
+                return comment.author === "github-actions[bot]"
+              });
+            }
+
             const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
 
             let markdown = '# Code Coverage Report\n\n';
@@ -101,7 +110,6 @@ jobs:
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
-              comment_id: 2063305962,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: markdown
