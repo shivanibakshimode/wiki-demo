@@ -76,9 +76,9 @@ jobs:
 
             const statementsParameters = fileCoverage["statements"];
             if(typeof statementsParameters === "object") {
-              const percentage = ${branchesParameters.pct};
+              const percentage = branchesParameters.pct;
               console.log("percentage: ", percentage);
-              markdown += `| ${\color{red}15\\%} &nbsp; \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\`&nbsp;&nbsp; `;
+              markdown += `| ${\color{red}percentage\\%} &nbsp; \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\`&nbsp;&nbsp; `;
             }
 
             const branchesParameters = fileCoverage["branches"];
