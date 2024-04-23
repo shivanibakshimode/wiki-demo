@@ -62,7 +62,6 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            console.log("print: ",context, context.comment, context.comment.id);
             const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
 
             let markdown = `<details>\n`
@@ -102,10 +101,21 @@ jobs:
             });
             markdown += `</details>`
 
-            github.rest.issues.updateComment({
-              comment_id: context.comment.id,
+            github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: markdown
             })
+
+  save:
+    needs: comment
+    runs-on: ubuntu-latest
+    if: contains(github.event.comment.body, 'Code Coverage Report')
+    outputs:
+      commentId: ${{ github.event.comment.id }}
+    steps:
+      - name: Save comment ID
+        run: |
+          echo ${{ github.event.comment.id }}
+
