@@ -57,8 +57,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Create/Update PR Comment
-        id: create-update-comment
+      - name: Create PR Comment
+        id: create-comment
         uses: actions/github-script@v5
         with:
           script: |
@@ -69,24 +69,29 @@ jobs:
             const fileCoverage = markdownContent["total"];
             markdown += `### Total \n`;
 
+            markdown += '| Statements | Branches | Functions | Lines |';
+            markdown += '\n';
+            markdown += '| :--------: | :------: | :-------: | :---: |';
+            markdown += '\n';
+
             const statementsParameters = fileCoverage["statements"];
             if(typeof statementsParameters === "object") {
-              markdown += `**${statementsParameters.pct}%** &nbsp;Statements: \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\`&nbsp;&nbsp;&nbsp;&nbsp; `;
+              markdown += `| **${\color{statementsParameters.pct < 50 ? red : green}${statementsParameters.pct}%}$** &nbsp; \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\`&nbsp;&nbsp; `;
             }
 
             const branchesParameters = fileCoverage["branches"];
             if(typeof branchesParameters === "object") {
-              markdown += `**${branchesParameters.pct}%** &nbsp;Branches: \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\`&nbsp;&nbsp;&nbsp;&nbsp; `;
+              markdown += `| **${branchesParameters.pct}%** &nbsp; \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\`&nbsp;&nbsp; `;
             }
             
             const functionsParameters = fileCoverage["functions"];
             if(typeof functionsParameters === "object") {
-              markdown += `**${functionsParameters.pct}%** &nbsp;Functions: \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\`&nbsp;&nbsp;&nbsp;&nbsp; `;
+              markdown += `| **${functionsParameters.pct}%** &nbsp; \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\`&nbsp;&nbsp; `;
             }
 
             const linesParameters = fileCoverage["lines"];
             if(typeof linesParameters === "object") {
-              markdown += `**${linesParameters.pct}%** &nbsp;Lines: \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\`&nbsp;&nbsp;&nbsp;&nbsp; `;
+              markdown += `| **${linesParameters.pct}%** &nbsp; \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\`&nbsp;&nbsp; `;
             }
             markdown += '\n';
 
