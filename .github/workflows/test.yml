@@ -62,43 +62,69 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            console.log("context: ", context);
             const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
 
-            let markdown = `<details>\n`
-            markdown += '<summary>\n\n### Code Coverage Report\n\n</summary>\n\n';
+            let markdown = '# Code Coverage Report\n\n';
             
             markdown += '| File  | Statements | Branches | Functions | Lines |';
             markdown += '\n';
             markdown += '| :---: | :--------: | :------: | :-------: | :---: |';
             markdown += '\n';
+            
+            const fileCoverage = markdownContent["total"];
+            markdown += `### Total \n`;
 
+            const statementsParameters = fileCoverage["statements"];
+            if(typeof statementsParameters === "object") {
+              markdown += `**${statementsParameters.pct}%**   Statements:   \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\` `;
+            }
+
+            const branchesParameters = fileCoverage["branches"];
+            if(typeof branchesParameters === "object") {
+              markdown += `**${branchesParameters.pct}%**   Branches:   \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\` `;
+            }
+            
+            const functionsParameters = fileCoverage["functions"];
+            if(typeof functionsParameters === "object") {
+              markdown += `**${functionsParameters.pct}%**   Functions:   \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\` `;
+            }
+
+            const linesParameters = fileCoverage["lines"];
+            if(typeof linesParameters === "object") {
+              markdown += `**${linesParameters.pct}%**   Lines:   \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\` `;
+            }
+            markdown += '\n';
+
+            markdown += `<details>\n`;
+            markdown += '<summary>\n\n### Files Code Coverage\n\n</summary>\n\n';
             Object.keys(markdownContent).forEach((filePath) => {
                 const fileCoverage = markdownContent[filePath];
 
-                markdown += `| ${filePath} `;
+                if(filePath !== "total") {
+                  markdown += `| ${filePath} `;
 
-                const statementsParameters = fileCoverage["statements"];
-                if(typeof statementsParameters === "object") {
-                  markdown += `| **${statementsParameters.pct}%**   \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\` `;
-                }
+                  const statementsParameters = fileCoverage["statements"];
+                  if(typeof statementsParameters === "object") {
+                    markdown += `| **${statementsParameters.pct}%**   \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\` `;
+                  }
 
-                const branchesParameters = fileCoverage["branches"];
-                if(typeof branchesParameters === "object") {
-                  markdown += `| **${branchesParameters.pct}%**   \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\` `;
-                }
-                
-                const functionsParameters = fileCoverage["functions"];
-                if(typeof functionsParameters === "object") {
-                  markdown += `| **${functionsParameters.pct}%**   \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\` `;
-                }
+                  const branchesParameters = fileCoverage["branches"];
+                  if(typeof branchesParameters === "object") {
+                    markdown += `| **${branchesParameters.pct}%**   \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\` `;
+                  }
+                  
+                  const functionsParameters = fileCoverage["functions"];
+                  if(typeof functionsParameters === "object") {
+                    markdown += `| **${functionsParameters.pct}%**   \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\` `;
+                  }
 
-                const linesParameters = fileCoverage["lines"];
-                if(typeof linesParameters === "object") {
-                  markdown += `| **${linesParameters.pct}%**   \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\` `;
-                }
+                  const linesParameters = fileCoverage["lines"];
+                  if(typeof linesParameters === "object") {
+                    markdown += `| **${linesParameters.pct}%**   \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\` `;
+                  }
 
-                markdown += '\n';
+                  markdown += '\n';
+                }
             });
             markdown += `</details>`
 
