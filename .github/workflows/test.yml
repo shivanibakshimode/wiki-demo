@@ -66,11 +66,6 @@ jobs:
 
             let markdown = '# Code Coverage Report\n\n';
             
-            markdown += '| File  | Statements | Branches | Functions | Lines |';
-            markdown += '\n';
-            markdown += '| :---: | :--------: | :------: | :-------: | :---: |';
-            markdown += '\n';
-            
             const fileCoverage = markdownContent["total"];
             markdown += `### Total \n`;
 
@@ -97,6 +92,12 @@ jobs:
 
             markdown += `<details>\n`;
             markdown += '<summary>\n\n### Files Code Coverage\n\n</summary>\n\n';
+
+            markdown += '| File  | Statements | Branches | Functions | Lines |';
+            markdown += '\n';
+            markdown += '| :---: | :--------: | :------: | :-------: | :---: |';
+            markdown += '\n';
+            
             Object.keys(markdownContent).forEach((filePath) => {
                 const fileCoverage = markdownContent[filePath];
 
