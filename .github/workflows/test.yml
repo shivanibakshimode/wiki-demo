@@ -78,7 +78,7 @@ jobs:
 
             const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
 
-            let markdown += <details>
+            let markdown = `<details>\n`
             markdown += '<summary># Code Coverage Report</summary>\n\n';
             
             markdown += '| File  | Statements | Branches | Functions | Lines |';
@@ -113,7 +113,7 @@ jobs:
 
                 markdown += '\n';
             });
-            markdown += </details>
+            markdown += `</details>`
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
