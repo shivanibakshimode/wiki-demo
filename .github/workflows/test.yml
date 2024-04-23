@@ -62,7 +62,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            console.log("context: ", context.comment);
+            console.log("context: ", context);
             const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
 
             let markdown = `<details>\n`
