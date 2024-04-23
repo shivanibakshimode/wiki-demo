@@ -62,15 +62,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            let commentToUpdate;
-
-            console.log("print: ", context.issue_comments, context.payload.pull_request.comments_url);
-            if (context.issue.number.comments) {
-              commentToUpdate = context.issue.number.comments.filter((comment) => {
-                return comment.author === "github-actions[bot]"
-              });
-            }
-
+            console.log("print: ",context, context.comment, context.comment.id);
             const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
 
             let markdown = `<details>\n`
@@ -110,7 +102,8 @@ jobs:
             });
             markdown += `</details>`
 
-            github.rest.issues.createComment({
+            github.rest.issues.updateComment({
+              comment_id: context.comment.id,
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
