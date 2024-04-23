@@ -64,12 +64,12 @@ jobs:
           script: |
             let commentToUpdate;
 
-            github.rest.issues.getComments({
+            const comments = github.rest.issues.getComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
             })
 
-            console.log("print: ", context.payload.pull_request, context.payload.pull_request.comments, context.payload.comments);
+            console.log("print: ", comments, context.payload.pull_request);
             if (context.issue.number.comments) {
               commentToUpdate = context.issue.number.comments.filter((comment) => {
                 return comment.author === "github-actions[bot]"
@@ -78,7 +78,8 @@ jobs:
 
             const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
 
-            let markdown = '# Code Coverage Report\n\n';
+            let markdown += <details>
+            markdown += '<summary># Code Coverage Report</summary>\n\n';
             
             markdown += '| File  | Statements | Branches | Functions | Lines |';
             markdown += '\n';
@@ -112,10 +113,11 @@ jobs:
 
                 markdown += '\n';
             });
+            markdown += </details>
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: <details>markdown</details>
+              body: markdown
             })
