@@ -18,6 +18,7 @@ export default {
     include: ["src/**/*.spec.ts"],
     threads: false,
     coverage: {
+      include: ['src/**'],
       provider: "istanbul",
       enabled: true,
       reporter: ["text", "json-summary", "json", "html"],
