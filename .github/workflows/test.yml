@@ -76,7 +76,7 @@ jobs:
 
             const statementsParameters = fileCoverage["statements"];
             if(typeof statementsParameters === "object") {
-              markdown += `| **${\color{statementsParameters.pct < 50 ? red : green}${statementsParameters.pct}%}$** &nbsp; \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\`&nbsp;&nbsp; `;
+              markdown += `| **${statementsParameters.pct}%** &nbsp; \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\`&nbsp;&nbsp; `;
             }
 
             const branchesParameters = fileCoverage["branches"];
