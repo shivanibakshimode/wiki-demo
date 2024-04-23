@@ -64,12 +64,7 @@ jobs:
           script: |
             let commentToUpdate;
 
-            const comments = github.rest.issues.getComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            })
-
-            console.log("print: ", comments, context.payload.pull_request);
+            console.log("print: ", context.payload.pull_request);
             if (context.issue.number.comments) {
               commentToUpdate = context.issue.number.comments.filter((comment) => {
                 return comment.author === "github-actions[bot]"
