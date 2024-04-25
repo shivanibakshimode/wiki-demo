@@ -62,7 +62,7 @@ jobs:
           # end of optional handling for multi line json
           echo "::set-output name=latestSummaryContent::$latestSummaryContent"
       - name: Copy report
-        run: cp -r coverage-latest ./coverage-previous
+        run: mv coverage-latest coverage-previous
       - name: Verify latest report
         run: ls ./coverage-latest
       - name: Verify previous report
