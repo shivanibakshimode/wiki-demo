@@ -20,15 +20,15 @@ jobs:
       - name: Upload Current Coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-curr
+          name: coverage-latest
           path: coverage
 
   report:
     needs: test
     runs-on: ubuntu-latest
     outputs:
-      summaryContentCurr: ${{ steps.read-current-report.outputs.summaryContentCurr }}
-      summaryContent: ${{ steps.read-previous-report.outputs.summaryContent }}
+      latestSummaryContent: ${{ steps.read-current-report.outputs.latestSummaryContent }}
+      previousSummaryContent: ${{ steps.read-previous-report.outputs.previousSummaryContent }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,35 +39,35 @@ jobs:
       - name: Read Previous Coverage Report
         id: read-previous-report
         run: |
-          if [ -f "./coverage/coverage-summary.json" ]; then
-            summaryContent=$(cat ./coverage/coverage-summary.json)
+          if [ -f "./coverage-previous/coverage-summary.json" ]; then
+            previousSummaryContent=$(cat ./coverage/coverage-summary.json)
             # the following lines are only required for multi line json
-            summaryContent="${summaryContent//'%'/'%25'}"
-            summaryContent="${summaryContent//$'\n'/'%0A'}"
-            summaryContent="${summaryContent//$'\r'/'%0D'}"
+            previousSummaryContent="${previousSummaryContent//'%'/'%25'}"
+            previousSummaryContent="${previousSummaryContent//$'\n'/'%0A'}"
+            previousSummaryContent="${previousSummaryContent//$'\r'/'%0D'}"
             # end of optional handling for multi line json
-            echo "::set-output name=summaryContent::$summaryContent"
+            echo "::set-output name=previousSummaryContent::$previousSummaryContent"
           fi
-      - name: Read Current Coverage Report
+      - name: Read Latest Coverage Report
         id: read-current-report
         run: |
-          summaryContentCurr=$(cat ./coverage-curr/coverage-summary.json)
+          latestSummaryContent=$(cat ./coverage-latest/coverage-summary.json)
           # the following lines are only required for multi line json
-          summaryContentCurr="${summaryContentCurr//'%'/'%25'}"
-          summaryContentCurr="${summaryContentCurr//$'\n'/'%0A'}"
-          summaryContentCurr="${summaryContentCurr//$'\r'/'%0D'}"
+          latestSummaryContent="${latestSummaryContent//'%'/'%25'}"
+          latestSummaryContent="${latestSummaryContent//$'\n'/'%0A'}"
+          latestSummaryContent="${latestSummaryContent//$'\r'/'%0D'}"
           # end of optional handling for multi line json
-          echo "::set-output name=summaryContentCurr::$summaryContentCurr"
+          echo "::set-output name=latestSummaryContent::$latestSummaryContent"
       - name: Copy report
-        run: cp -r coverage-curr ./coverage
+        run: cp -r coverage-latest ./coverage
       - name: Verify current report
-        run: ls ./coverage-curr
+        run: ls ./coverage-latest
       - name: Verify previous report
         run: ls ./coverage
-      - name: Upload Old Coverage
+      - name: Upload Previous Coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage
+          name: coverage-previous
           path: coverage
 
   comment:
@@ -86,11 +86,14 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContentCurr }}))
+            const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.latestSummaryContent }}))
+            const previousMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.previousSummaryContent }}))
 
             let markdown = '# Code Coverage Report\n\n';
             
-            const fileCoverage = markdownContent["total"];
+            const latestFileCoverage = latestMarkdownContent["total"];
+            const previousFileCoverage = previousMarkdownContent["total"];
+
             markdown += `### Total \n`;
 
             markdown += '| Statements | Branches | Functions | Lines |';
@@ -98,22 +101,28 @@ jobs:
             markdown += '| :--------: | :------: | :-------: | :---: |';
             markdown += '\n';
 
-            const statementsParameters = fileCoverage["statements"];
-            if(typeof statementsParameters === "object") {
-              markdown += `| **${statementsParameters.pct}%** &nbsp; \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\`&nbsp;&nbsp; `;
+            const latestStatementsParameters = latestFileCoverage["statements"];
+            const previousStatementsParameters = previousFileCoverage["statements"];
+            
+            if(typeof latestStatementsParameters === "object") {
+              if(latestStatementsParameters.pct > previousStatementsParameters.pct) {
+                markdown += `| **${latestStatementsParameters.pct}%** &nbsp;&#8593; \`${latestStatementsParameters.covered}/${latestStatementsParameters.total - latestStatementsParameters.skipped}\`&nbsp;&nbsp; `;
+              } else {
+                markdown += `| **${latestStatementsParameters.pct}%** &nbsp;&#8595; \`${latestStatementsParameters.covered}/${latestStatementsParameters.total - latestStatementsParameters.skipped}\`&nbsp;&nbsp; `;
+              }
             }
 
-            const branchesParameters = fileCoverage["branches"];
+            const branchesParameters = latestFileCoverage["branches"];
             if(typeof branchesParameters === "object") {
               markdown += `| **${branchesParameters.pct}%** &nbsp; \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\`&nbsp;&nbsp; `;
             }
             
-            const functionsParameters = fileCoverage["functions"];
+            const functionsParameters = latestFileCoverage["functions"];
             if(typeof functionsParameters === "object") {
               markdown += `| **${functionsParameters.pct}%** &nbsp; \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\`&nbsp;&nbsp; `;
             }
 
-            const linesParameters = fileCoverage["lines"];
+            const linesParameters = latestFileCoverage["lines"];
             if(typeof linesParameters === "object") {
               markdown += `| **${linesParameters.pct}%** &nbsp; \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\`&nbsp;&nbsp; `;
             }
@@ -127,29 +136,29 @@ jobs:
             markdown += '| :---: | :--------: | :------: | :-------: | :---: |';
             markdown += '\n';
 
-            Object.keys(markdownContent).forEach((filePath) => {
-                const fileCoverage = markdownContent[filePath];
+            Object.keys(latestMarkdownContent).forEach((filePath) => {
+                const latestFileCoverage = latestMarkdownContent[filePath];
 
                 const fileName = filePath.split(context.repo.repo).pop();
                 if(fileName !== "total") {
                   markdown += `| ${fileName} `;
 
-                  const statementsParameters = fileCoverage["statements"];
+                  const statementsParameters = latestFileCoverage["statements"];
                   if(typeof statementsParameters === "object") {
                     markdown += `| **${statementsParameters.pct}%**   \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\` `;
                   }
 
-                  const branchesParameters = fileCoverage["branches"];
+                  const branchesParameters = latestFileCoverage["branches"];
                   if(typeof branchesParameters === "object") {
                     markdown += `| **${branchesParameters.pct}%**   \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\` `;
                   }
                   
-                  const functionsParameters = fileCoverage["functions"];
+                  const functionsParameters = latestFileCoverage["functions"];
                   if(typeof functionsParameters === "object") {
                     markdown += `| **${functionsParameters.pct}%**   \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\` `;
                   }
 
-                  const linesParameters = fileCoverage["lines"];
+                  const linesParameters = latestFileCoverage["lines"];
                   if(typeof linesParameters === "object") {
                     markdown += `| **${linesParameters.pct}%**   \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\` `;
                   }
