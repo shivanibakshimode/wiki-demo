@@ -63,10 +63,10 @@ jobs:
           echo "::set-output name=latestSummaryContent::$latestSummaryContent"
       - name: Copy report
         run: mv coverage-latest coverage-previous
-      - name: Verify latest report
-        run: ls ./coverage-latest
+      # - name: Verify latest report
+      #   run: ls ./coverage-latest
       - name: Verify previous report
-        run: ls ./coverage-previous
+        run: ls -R
       - name: Upload Previous Coverage
         uses: actions/upload-artifact@v4
         with:
