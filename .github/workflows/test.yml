@@ -39,8 +39,7 @@ jobs:
       - name: Read Previous Coverage Report
         id: read-previous-report
         run: |
-          FILE = ./coverage/coverage-summary.json;
-          if([ -f "$FILE" ]) {
+          if [ -f "./coverage/coverage-summary.json" ]; then
             summaryContent=$(cat ./coverage/coverage-summary.json)
             # the following lines are only required for multi line json
             summaryContent="${summaryContent//'%'/'%25'}"
@@ -48,7 +47,7 @@ jobs:
             summaryContent="${summaryContent//$'\r'/'%0D'}"
             # end of optional handling for multi line json
             echo "::set-output name=summaryContent::$summaryContent"
-          }
+          fi
       - name: Read Current Coverage Report
         id: read-current-report
         run: |
