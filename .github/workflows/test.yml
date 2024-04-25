@@ -27,8 +27,8 @@ jobs:
           UNZIP_DIR: ./coverage-previous
         with:
           script: |
-            const script = $(node scripts/scripts/download-previous-artifact.js)
-            await script({github, context, core}) 
+            import { script } from './scripts/download-previous-artifact.js'
+            await script({github, context, core})
       - name: Upload Latest Coverage
         uses: actions/upload-artifact@v4
         with:
