@@ -17,7 +17,7 @@ jobs:
         run: npm install
       - name: Test
         run: npx vitest --coverage.enabled true
-      - name: Upload Current Coverage
+      - name: Upload Latest Coverage
         uses: actions/upload-artifact@v4
         with:
           name: coverage-latest
@@ -40,7 +40,7 @@ jobs:
         id: read-previous-report
         run: |
           if [ -f "./coverage-previous/coverage-summary.json" ]; then
-            previousSummaryContent=$(cat ./coverage/coverage-summary.json)
+            previousSummaryContent=$(cat ./coverage-previous/coverage-summary.json)
             # the following lines are only required for multi line json
             previousSummaryContent="${previousSummaryContent//'%'/'%25'}"
             previousSummaryContent="${previousSummaryContent//$'\n'/'%0A'}"
@@ -59,16 +59,16 @@ jobs:
           # end of optional handling for multi line json
           echo "::set-output name=latestSummaryContent::$latestSummaryContent"
       - name: Copy report
-        run: cp -r coverage-latest ./coverage
+        run: cp -r coverage-latest ./coverage-previous
       - name: Verify current report
         run: ls ./coverage-latest
       - name: Verify previous report
-        run: ls ./coverage
+        run: ls ./coverage-previous
       - name: Upload Previous Coverage
         uses: actions/upload-artifact@v4
         with:
           name: coverage-previous
-          path: coverage
+          path: coverage-previous
 
   comment:
     needs: report
