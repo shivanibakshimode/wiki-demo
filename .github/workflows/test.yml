@@ -17,17 +17,18 @@ jobs:
         run: npm install
       - name: Test
         run: npx vitest --coverage.enabled true
-      - name: Upload Coverage
+      - name: Upload Current Coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage
-          path: coverage
+          name: coverage-curr
+          path: coverage-curr
 
   report:
     needs: test
     runs-on: ubuntu-latest
     outputs:
-      summaryContent: ${{ steps.read-report.outputs.summaryContent }}
+      summaryContentCurr: ${{ steps.read-current-report.outputs.summaryContentCurr }}
+      summaryContent: ${{ steps.read-previous-report.outputs.summaryContent }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,16 +36,40 @@ jobs:
         uses: actions/download-artifact@v4
       - name: List Files
         run: ls -R
-      - name: Read Coverage Report
-        id: read-report
+      - name: Read Previous Coverage Report
+        id: read-previous-report
         run: |
-          summaryContent=$(cat ./coverage/coverage-summary.json)
+          const FILE = ./coverage/coverage-summary.json;
+          if([ -f "$FILE" ]) {
+            summaryContent=$(cat ./coverage/coverage-summary.json)
+            # the following lines are only required for multi line json
+            summaryContent="${summaryContent//'%'/'%25'}"
+            summaryContent="${summaryContent//$'\n'/'%0A'}"
+            summaryContent="${summaryContent//$'\r'/'%0D'}"
+            # end of optional handling for multi line json
+            echo "::set-output name=summaryContent::$summaryContent"
+          }
+      - name: Read Current Coverage Report
+        id: read-current-report
+        run: |
+          summaryContentCurr=$(cat ./coverage-curr/coverage-summary.json)
           # the following lines are only required for multi line json
-          summaryContent="${summaryContent//'%'/'%25'}"
-          summaryContent="${summaryContent//$'\n'/'%0A'}"
-          summaryContent="${summaryContent//$'\r'/'%0D'}"
+          summaryContentCurr="${summaryContentCurr//'%'/'%25'}"
+          summaryContentCurr="${summaryContentCurr//$'\n'/'%0A'}"
+          summaryContentCurr="${summaryContentCurr//$'\r'/'%0D'}"
           # end of optional handling for multi line json
-          echo "::set-output name=summaryContent::$summaryContent"
+          echo "::set-output name=summaryContentCurr::$summaryContentCurr"
+      - name: Copy report
+        run: cp -r coverage-curr ./coverage
+      - name: Verify current report
+        run: ls ./coverage-curr
+      - name: Verify previous report
+        run: ls ./coverage
+      - name: Upload Old Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
 
   comment:
     needs: report
@@ -62,7 +87,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
+            const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContentCurr }}))
 
             let markdown = '# Code Coverage Report\n\n';
             
