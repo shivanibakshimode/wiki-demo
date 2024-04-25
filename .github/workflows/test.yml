@@ -183,7 +183,7 @@ jobs:
         with:
           script: |
             const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.latestSummaryContent }}));
-            console.log("latestMarkdownContent: ", ${{ needs.report.outputs.latestSummaryContent }});
+            console.log("latestMarkdownContent: ", ${{ needs.report.outputs.latestSummaryContent == 'true' }});
 
             let markdown = '# Code Coverage Report\n\n';
             
@@ -197,7 +197,7 @@ jobs:
 
             const latestStatementsParameters = latestFileCoverage["statements"];
             if(typeof latestStatementsParameters === "object") {
-              markdown += `| **${latestStatementsParameters.pct}%** &nbsp; \`${latestStatementsParameters.covered}/${latestStatementsParameters.total - latestStatementsParameters.skipped}\`&nbsp;&nbsp; `;
+              markdown += `| **${latestStatementsParameters.pct}%** &nbsp;&#8593; \`${latestStatementsParameters.covered}/${latestStatementsParameters.total - latestStatementsParameters.skipped}\`&nbsp;&nbsp; `;
             }
 
             const branchesParameters = latestFileCoverage["branches"];
