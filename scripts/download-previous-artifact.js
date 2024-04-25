@@ -1,3 +1,6 @@
+import fs from "fs";
+import { execSync } from "node:child_process";
+
 export default async ({
     github,
     context,
@@ -45,8 +48,8 @@ export default async ({
         artifact_id: artifact.id,
         archive_format: 'zip'
       });
-      require('fs').writeFileSync(process.env.ARTIFACT_FILENAME, Buffer.from(response.data));
-      require('child_process').execSync(`unzip -o ${process.env.ARTIFACT_FILENAME} -d ${process.env.UNZIP_DIR}`);
+      fs.writeFileSync(process.env.ARTIFACT_FILENAME, Buffer.from(response.data));
+      execSync(`unzip -o ${process.env.ARTIFACT_FILENAME} -d ${process.env.UNZIP_DIR}`);
   
       console.log("Artifact downloaded successfully");
     } else {
