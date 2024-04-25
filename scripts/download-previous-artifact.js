@@ -1,7 +1,7 @@
 import fs from "fs";
 import { execSync } from "node:child_process";
 
-export default async ({ github, context, core }) => {
+export async function script({ github, context, core }) {
   const owner = context.repo.owner;
   const repo = context.repo.repo;
 
