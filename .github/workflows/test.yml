@@ -18,7 +18,7 @@ jobs:
       - name: Test
         run: npx vitest --coverage.enabled true
       - name: Download artifact
-        uses: actions/github-script@v6
+        uses: actions/github-script@v5
         continue-on-error: true
         env:
           WORKFLOW_FILENAME: test.yml
