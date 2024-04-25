@@ -39,7 +39,7 @@ jobs:
       - name: Read Previous Coverage Report
         id: read-previous-report
         run: |
-          const FILE = ./coverage/coverage-summary.json;
+          FILE = ./coverage/coverage-summary.json;
           if([ -f "$FILE" ]) {
             summaryContent=$(cat ./coverage/coverage-summary.json)
             # the following lines are only required for multi line json
