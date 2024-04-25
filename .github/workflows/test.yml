@@ -86,8 +86,10 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.latestSummaryContent }}))
-            const previousMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.previousSummaryContent }}))
+            const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.latestSummaryContent }}));
+            const previousMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.previousSummaryContent }}));
+            console.log("previousMarkdownContent: ", previousMarkdownContent);
+            console.log("latestMarkdownContent: ", latestMarkdownContent);
 
             let markdown = '# Code Coverage Report\n\n';
             
