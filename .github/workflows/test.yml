@@ -82,7 +82,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create PR Comment with trend
-        id: create-comment
+        id: create-comment-with-trend
         if: needs.report.outputs.previousSummaryContent == 'true'
         uses: actions/github-script@v5
         with:
