@@ -27,7 +27,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     outputs:
-      latestSummaryContent: ${{ steps.read-current-report.outputs.latestSummaryContent }}
+      latestSummaryContent: ${{ steps.read-latest-report.outputs.latestSummaryContent }}
       previousSummaryContent: ${{ steps.read-previous-report.outputs.previousSummaryContent }}
     steps:
       - name: Checkout
@@ -39,17 +39,15 @@ jobs:
       - name: Read Previous Coverage Report
         id: read-previous-report
         run: |
-          if [ -f "./coverage-previous/coverage-summary.json" ]; then
-            previousSummaryContent=$(cat ./coverage-previous/coverage-summary.json)
-            # the following lines are only required for multi line json
-            previousSummaryContent="${previousSummaryContent//'%'/'%25'}"
-            previousSummaryContent="${previousSummaryContent//$'\n'/'%0A'}"
-            previousSummaryContent="${previousSummaryContent//$'\r'/'%0D'}"
-            # end of optional handling for multi line json
-            echo "::set-output name=previousSummaryContent::$previousSummaryContent"
-          fi
+          previousSummaryContent=$(cat ./coverage-previous/coverage-summary.json)
+          # the following lines are only required for multi line json
+          previousSummaryContent="${previousSummaryContent//'%'/'%25'}"
+          previousSummaryContent="${previousSummaryContent//$'\n'/'%0A'}"
+          previousSummaryContent="${previousSummaryContent//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=previousSummaryContent::$previousSummaryContent"
       - name: Read Latest Coverage Report
-        id: read-current-report
+        id: read-latest-report
         run: |
           latestSummaryContent=$(cat ./coverage-latest/coverage-summary.json)
           # the following lines are only required for multi line json
@@ -60,7 +58,7 @@ jobs:
           echo "::set-output name=latestSummaryContent::$latestSummaryContent"
       - name: Copy report
         run: cp -r coverage-latest ./coverage-previous
-      - name: Verify current report
+      - name: Verify latest report
         run: ls ./coverage-latest
       - name: Verify previous report
         run: ls ./coverage-previous
@@ -83,7 +81,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Create PR Comment with indicator
         id: create-comment-with-indicator
-        if: ${{ needs.report.outputs.previousSummaryContent == 'true' }}
+        if: ${{ needs.report.outputs.previousSummaryContent }}
         uses: actions/github-script@v5
         with:
           script: |
@@ -183,6 +181,7 @@ jobs:
         with:
           script: |
             const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.latestSummaryContent }}));
+            console.log("latestMarkdownContent: ", ${{ needs.report.outputs.latestSummaryContent }});
 
             let markdown = '# Code Coverage Report\n\n';
             
