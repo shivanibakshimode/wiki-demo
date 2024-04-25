@@ -17,10 +17,18 @@ jobs:
         run: npm install
       - name: Test
         run: npx vitest --coverage.enabled true
-      - name: Download Artifacts
-        uses: actions/download-artifact@v4
-      - name: List Files
-        run: ls -R
+      - name: Download artifact
+        uses: actions/github-script@v6
+        continue-on-error: true
+        env:
+          WORKFLOW_FILENAME: test.yml
+          ARTIFACT_NAME: coverage-previous
+          ARTIFACT_FILENAME: coverage-previous.zip
+          UNZIP_DIR: ./coverage-previous
+        with:
+          script: |
+            const script = require('./scripts/download-previous-artifact.js')
+            await script({github, context, core}) 
       - name: Upload Latest Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -67,8 +75,6 @@ jobs:
           echo "::set-output name=latestSummaryContent::$latestSummaryContent"
       - name: Copy report
         run: mv coverage-latest coverage-previous
-      - name: Verify previous report
-        run: ls -R
       - name: Upload Previous Coverage
         uses: actions/upload-artifact@v4
         with:
