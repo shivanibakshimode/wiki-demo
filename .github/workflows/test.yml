@@ -21,7 +21,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-curr
-          path: coverage-curr
+          path: coverage
 
   report:
     needs: test
