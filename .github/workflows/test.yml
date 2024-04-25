@@ -40,6 +40,7 @@ jobs:
         id: read-previous-report
         run: |
           if [ -f "./coverage-previous/coverage-summary.json" ]; then
+            echo "yes"
             previousSummaryContent=$(cat ./coverage-previous/coverage-summary.json)
             # the following lines are only required for multi line json
             previousSummaryContent="${previousSummaryContent//'%'/'%25'}"
@@ -48,7 +49,7 @@ jobs:
             # end of optional handling for multi line json
             echo "::set-output name=previousSummaryContent::$previousSummaryContent"
           else 
-            echo "yess"
+            echo "no"
           fi
       - name: Read Latest Coverage Report
         id: read-latest-report
@@ -70,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-previous
-          path: coverage-previous
+          path: coverage
 
   comment:
     needs: report
