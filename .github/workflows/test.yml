@@ -201,7 +201,7 @@ jobs:
         with:
           script: |
             const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.latestSummaryContent }}));
-            console.log("latestMarkdownContent: ", latestMarkdownContent);
+            console.log("latestMarkdownContent: ", latestMarkdownContent, ${{ needs.test.outputs.previousSummaryContent }});
 
             let markdown = '# Code Coverage Report\n\n';
             
