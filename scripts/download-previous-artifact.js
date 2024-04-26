@@ -49,17 +49,16 @@ export async function script({ github, context, core }) {
       artifact_id: artifact.id,
       archive_format: "zip",
     });
-    console.log("myyy response: ", response);
-    // console.log(
-    //   "my response: ",
-    //   response,
-    //   process.env.ARTIFACT_FILENAME,
-    //   Buffer.from(response.data)
-    // );
-    // fs.writeFileSync(process.env.ARTIFACT_FILENAME, Buffer.from(response.data));
-    // execSync(
-    //   `unzip -o ${process.env.ARTIFACT_FILENAME} -d ${process.env.UNZIP_DIR}`
-    // );
+    console.log(
+      "my response: ",
+      response,
+      process.env.ARTIFACT_FILENAME,
+      Buffer.from(response.data)
+    );
+    fs.writeFileSync(process.env.ARTIFACT_FILENAME, Buffer.from(response.data));
+    execSync(
+      `unzip -o ${process.env.ARTIFACT_FILENAME} -d ${process.env.UNZIP_DIR}`
+    );
 
     console.log("Artifact downloaded successfully");
   } else {
