@@ -36,11 +36,11 @@ jobs:
               repo,
             });
 
-            console.log("$WORKFLOW_FILENAME: ", ${{ env.WORKFLOW_FILENAME }})
             const workflow = workflows.data.workflows.find((w) =>
               w.path.includes("${{ env.WORKFLOW_FILENAME }}")
             );
 
+            console.log("myyyy workflow: ", workflow);
             if (!workflow) {
               core.setFailed("No workflow found");
               return;
