@@ -89,7 +89,7 @@ jobs:
           path: coverage
 
   comment:
-    needs: report
+    needs: [test, report]
     runs-on: ubuntu-latest
     permissions:
       contents: write
