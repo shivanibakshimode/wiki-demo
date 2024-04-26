@@ -4,7 +4,6 @@ import { execSync } from "node:child_process";
 export async function script({ github, context, core }) {
   const owner = context.repo.owner;
   const repo = context.repo.repo;
-  const { SHA } = process.env;
 
   const workflows = await github.rest.actions.listRepoWorkflows({
     owner,
@@ -49,7 +48,6 @@ export async function script({ github, context, core }) {
       repo,
       artifact_id: artifact.id,
       archive_format: "zip",
-      ref: `${SHA}`
     });
     console.log(
       "my response: ",
