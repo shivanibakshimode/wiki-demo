@@ -7,8 +7,8 @@ function addIndicator(latestValue, previousValue) {
   return "-";
 }
 
-function addMarkdownContent(markdown, latestParameters, previousParameters) {
-  return markdown += `| **${latestParameters.pct}%** &nbsp;${addIndicator(
+function addMarkdownContent(latestParameters, previousParameters) {
+  return `| **${latestParameters.pct}%** &nbsp;${addIndicator(
     latestParameters.pct,
     previousParameters.pct
   )} \`${latestParameters.covered}/${
@@ -47,8 +47,7 @@ export async function createComment({
       typeof latestStatementsParameters === "object" &&
       typeof previousStatementsParameters === "object"
     ) {
-      addMarkdownContent(
-        markdown,
+      markdown += addMarkdownContent(
         latestStatementsParameters,
         previousStatementsParameters
       );
@@ -61,8 +60,7 @@ export async function createComment({
       typeof latestBranchesParameters === "object" &&
       typeof previousBranchesParameters === "object"
     ) {
-      addMarkdownContent(
-        markdown,
+      markdown += addMarkdownContent(
         latestBranchesParameters,
         previousBranchesParameters
       );
@@ -75,8 +73,7 @@ export async function createComment({
       typeof latestFunctionsParameters === "object" &&
       typeof previousFunctionsParameters === "object"
     ) {
-      addMarkdownContent(
-        markdown,
+      markdown += addMarkdownContent(
         latestFunctionsParameters,
         previousFunctionsParameters
       );
@@ -89,8 +86,7 @@ export async function createComment({
       typeof latestLinesParameters === "object" &&
       typeof previousLinesParameters === "object"
     ) {
-      addMarkdownContent(
-        markdown,
+      markdown += addMarkdownContent(
         latestLinesParameters,
         previousLinesParameters
       );
