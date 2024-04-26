@@ -23,9 +23,12 @@ export async function createComment({
   markdown += "| :--------: | :------: | :-------: | :---: |";
   markdown += "\n";
 
+  const previousMarkdownContentExists = Object.keys(previousMarkdownContent)?.length;
+  console.log("previousMarkdownContentExists: ", previousMarkdownContentExists);
+
   const latestFileCoverage = latestMarkdownContent["total"];
 
-  if (previousMarkdownContent) {
+  if (previousMarkdownContentExists) {
     const previousFileCoverage = previousMarkdownContent["total"];
 
     const latestStatementsParameters = latestFileCoverage["statements"];
@@ -142,7 +145,7 @@ export async function createComment({
     if (fileName !== "total") {
       markdown += `| ${fileName} `;
 
-      if (previousMarkdownContent) {
+      if (previousMarkdownContentExists) {
         const previousFileCoverage = previousMarkdownContent[filePath];
 
         const latestStatementsParameters = latestFileCoverage["statements"];

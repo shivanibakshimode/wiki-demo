@@ -108,6 +108,6 @@ jobs:
             const previousMarkdownContent = JSON.parse(JSON.stringify(${{ needs.test.outputs.previousSummaryContent }}));
             console.log("yml latestMarkdownContent: ", latestMarkdownContent, previousMarkdownContent);
 
-            const { createComment } = await import('${{ github.workspace }}/scripts/create-comment.js')
+            const { createComment } = await import('${{ github.workspace }}/scripts/create-comment.js');
             await createComment({github, context, latestMarkdownContent, previousMarkdownContent});
 
