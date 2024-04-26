@@ -45,7 +45,7 @@ jobs:
             previousSummaryContent="${previousSummaryContent//$'\n'/'%0A'}"
             previousSummaryContent="${previousSummaryContent//$'\r'/'%0D'}"
             # end of optional handling for multi line json
-            echo "::set-output name=previousSummaryContent::$previousSummaryContent"
+            echo "{previousSummaryContent}={$previousSummaryContent}" >> $GITHUB_OUTPUT
           else 
             echo "no"
           fi
@@ -79,7 +79,7 @@ jobs:
           latestSummaryContent="${latestSummaryContent//$'\n'/'%0A'}"
           latestSummaryContent="${latestSummaryContent//$'\r'/'%0D'}"
           # end of optional handling for multi line json
-          echo "::set-output name=latestSummaryContent::$latestSummaryContent"
+          echo "{latestSummaryContent}={$latestSummaryContent}" >> $GITHUB_OUTPUT
       - name: Copy report
         run: mv coverage-latest coverage-previous
       - name: Upload Previous Coverage
@@ -101,7 +101,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Create PR Comment with indicator
         id: create-comment-with-indicator
-        if: ${{ needs.test.outputs.previousSummaryContent }}
+        if: "${{ needs.test.outputs.previousSummaryContent }}"
         uses: actions/github-script@v6
         with:
           script: |
