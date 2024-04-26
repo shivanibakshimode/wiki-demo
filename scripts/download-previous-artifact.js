@@ -32,6 +32,7 @@ export async function script({ github, context, core }) {
     return;
   }
 
+  console.log("runs.data.workflow_runs: ", runs.data.workflow_runs);
   const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
     owner,
     repo,
