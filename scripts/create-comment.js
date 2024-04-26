@@ -13,6 +13,7 @@ export async function createComment({
   latestMarkdownContent,
   previousMarkdownContent,
 }) {
+  console.log("previousMarkdownContent: ", previousMarkdownContent);
   let markdown = "# Code Coverage Report\n\n";
 
   markdown += `### Total \n`;
@@ -89,13 +90,13 @@ export async function createComment({
       }\`&nbsp;&nbsp; `;
     }
   } else {
-    const latestStatementsParameters = latestFileCoverage["statements"];
+    const statementsParameters = latestFileCoverage["statements"];
 
-    if (typeof latestStatementsParameters === "object") {
-      markdown += `| **${latestStatementsParameters.pct}%** &nbsp; \`${
-        latestStatementsParameters.covered
+    if (typeof statementsParameters === "object") {
+      markdown += `| **${statementsParameters.pct}%** &nbsp; \`${
+        statementsParameters.covered
       }/${
-        latestStatementsParameters.total - latestStatementsParameters.skipped
+        statementsParameters.total - statementsParameters.skipped
       }\`&nbsp;&nbsp; `;
     }
 
@@ -134,14 +135,15 @@ export async function createComment({
   markdown += "| :---: | :--------: | :------: | :-------: | :---: |";
   markdown += "\n";
 
-  if (previousMarkdownContent) {
-    Object.keys(latestMarkdownContent).forEach((filePath) => {
-      const latestFileCoverage = latestMarkdownContent[filePath];
-      const previousFileCoverage = previousMarkdownContent[filePath];
+  Object.keys(latestMarkdownContent).forEach((filePath) => {
+    const latestFileCoverage = latestMarkdownContent[filePath];
 
-      const fileName = filePath.split(context.repo.repo).pop();
-      if (fileName !== "total") {
-        markdown += `| ${fileName} `;
+    const fileName = filePath.split(context.repo.repo).pop();
+    if (fileName !== "total") {
+      markdown += `| ${fileName} `;
+
+      if (previousMarkdownContent) {
+        const previousFileCoverage = previousMarkdownContent[filePath];
 
         const latestStatementsParameters = latestFileCoverage["statements"];
         const previousStatementsParameters = previousFileCoverage["statements"];
@@ -209,18 +211,7 @@ export async function createComment({
             latestLinesParameters.total - latestLinesParameters.skipped
           }\`&nbsp;&nbsp; `;
         }
-
-        markdown += "\n";
-      }
-    });
-  } else {
-    Object.keys(latestMarkdownContent).forEach((filePath) => {
-      const latestFileCoverage = latestMarkdownContent[filePath];
-
-      const fileName = filePath.split(context.repo.repo).pop();
-      if (fileName !== "total") {
-        markdown += `| ${fileName} `;
-
+      } else {
         const statementsParameters = latestFileCoverage["statements"];
         if (typeof statementsParameters === "object") {
           markdown += `| **${statementsParameters.pct}%**   \`${
@@ -248,11 +239,11 @@ export async function createComment({
             linesParameters.covered
           }/${linesParameters.total - linesParameters.skipped}\` `;
         }
-
-        markdown += "\n";
       }
-    });
-  }
+
+      markdown += "\n";
+    }
+  });
 
   markdown += `</details>`;
 
