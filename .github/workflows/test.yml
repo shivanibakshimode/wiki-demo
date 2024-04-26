@@ -38,6 +38,8 @@ jobs:
   report:
     needs: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       latestSummaryContent: ${{ steps.read-latest-report.outputs.latestSummaryContent }}
       previousSummaryContent: ${{ steps.read-previous-report.outputs.previousSummaryContent }}
