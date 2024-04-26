@@ -36,6 +36,7 @@ jobs:
               repo,
             });
 
+            console.log("$WORKFLOW_FILENAME: ", $WORKFLOW_FILENAME);
             const workflow = workflows.data.workflows.find((w) =>
               w.path.includes("$WORKFLOW_FILENAME")
             );
