@@ -45,7 +45,7 @@ jobs:
             previousSummaryContent="${previousSummaryContent//$'\n'/'%0A'}"
             previousSummaryContent="${previousSummaryContent//$'\r'/'%0D'}"
             # end of optional handling for multi line json
-            echo "previousSummaryContent=$previousSummaryContent" >> $GITHUB_OUTPUT
+            echo "::set-output name=previousSummaryContent::$previousSummaryContent"
           else 
             echo "no"
           fi
@@ -79,7 +79,7 @@ jobs:
           latestSummaryContent="${latestSummaryContent//$'\n'/'%0A'}"
           latestSummaryContent="${latestSummaryContent//$'\r'/'%0D'}"
           # end of optional handling for multi line json
-          echo "latestSummaryContent=$latestSummaryContent" >> $GITHUB_OUTPUT
+          echo "::set-output name=latestSummaryContent::$latestSummaryContent"
       - name: Copy report
         run: mv coverage-latest coverage-previous
       - name: Upload Previous Coverage
@@ -201,7 +201,7 @@ jobs:
         with:
           script: |
             const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.latestSummaryContent }}));
-            console.log("latestMarkdownContent: ", latestMarkdownContent, ${{ needs.report.outputs.latestSummaryContent }});
+            console.log("latestMarkdownContent: ", latestMarkdownContent);
 
             let markdown = '# Code Coverage Report\n\n';
             
