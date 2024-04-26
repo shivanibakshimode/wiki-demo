@@ -26,6 +26,7 @@ jobs:
           ARTIFACT_NAME: coverage-previous
           ARTIFACT_FILENAME: coverage-previous.zip
           UNZIP_DIR: ./coverage-previous
+          SHA: '${{env.parentSHA}}'
         with:
           script: |
             const { script } = await import('${{ github.workspace }}/scripts/download-previous-artifact.js')
