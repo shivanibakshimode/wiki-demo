@@ -20,7 +20,7 @@ jobs:
       - name: Test
         run: npx vitest --coverage.enabled true
       - name: Download Previous Artifacts
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         env:
           WORKFLOW_FILENAME: test.yml
           ARTIFACT_NAME: coverage-previous
@@ -28,63 +28,8 @@ jobs:
           UNZIP_DIR: ./coverage-previous
         with:
           script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-
-            const workflows = await github.rest.actions.listRepoWorkflows({
-              owner,
-              repo,
-            });
-
-            const workflow = workflows.data.workflows.find((w) =>
-              w.path.includes("${{ env.WORKFLOW_FILENAME }}")
-            );
-
-            console.log("myyyy workflow: ", workflow);
-            if (!workflow) {
-              core.setFailed("No workflow found");
-              return;
-            }
-
-            const runs = await github.rest.actions.listWorkflowRuns({
-              owner,
-              repo,
-              workflow_id: workflow.id,
-              status: "success",
-              per_page: 1,
-            });
-
-            if (runs.data.total_count === 0) {
-              core.setFailed("No runs found");
-              return;
-            }
-
-            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-              owner,
-              repo,
-              run_id: runs.data.workflow_runs[0].id,
-            });
-
-            const artifact = artifacts.data.artifacts.find(
-              (artifact) => artifact.name === "${{ env.ARTIFACT_NAME }}"
-            );
-            if (artifact) {
-              console.log("artifact: ", artifact);
-              const response = await github.rest.actions.downloadArtifact({
-                owner,
-                repo,
-                artifact_id: artifact.id,
-                archive_format: "zip",
-              });
-              console.log(
-                "my response: ",
-                response
-              );
-
-              console.log("Artifact downloaded successfully");
-            } else {
-              core.setFailed("No artifact found");
-            }
+            const { script } = await import('${{ github.workspace }}/scripts/download-previous-artifact.js')
+            await script({github, context, core})
       - name: List Files
         run: ls -R
       - name: Upload Latest Coverage
@@ -156,7 +101,7 @@ jobs:
       - name: Create PR Comment with indicator
         id: create-comment-with-indicator
         if: ${{ needs.report.outputs.previousSummaryContent }}
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           script: |
             const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.latestSummaryContent }}));
@@ -165,7 +110,7 @@ jobs:
             console.log("latestMarkdownContent: ", latestMarkdownContent);
 
             let markdown = '# Code Coverage Report\n\n';
-
+            
             const latestFileCoverage = latestMarkdownContent["total"];
             const previousFileCoverage = previousMarkdownContent["total"];
 
@@ -178,7 +123,7 @@ jobs:
 
             const latestStatementsParameters = latestFileCoverage["statements"];
             const previousStatementsParameters = previousFileCoverage["statements"];
-
+            
             if(typeof latestStatementsParameters === "object") {
               if(latestStatementsParameters.pct > previousStatementsParameters.pct) {
                 markdown += `| **${latestStatementsParameters.pct}%** &nbsp;&#8593; \`${latestStatementsParameters.covered}/${latestStatementsParameters.total - latestStatementsParameters.skipped}\`&nbsp;&nbsp; `;
@@ -191,7 +136,7 @@ jobs:
             if(typeof branchesParameters === "object") {
               markdown += `| **${branchesParameters.pct}%** &nbsp; \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\`&nbsp;&nbsp; `;
             }
-
+            
             const functionsParameters = latestFileCoverage["functions"];
             if(typeof functionsParameters === "object") {
               markdown += `| **${functionsParameters.pct}%** &nbsp; \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\`&nbsp;&nbsp; `;
@@ -251,13 +196,13 @@ jobs:
             })
       - name: Create PR Comment
         id: create-comment
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           script: |
             const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.latestSummaryContent }}));
 
             let markdown = '# Code Coverage Report\n\n';
-
+            
             const latestFileCoverage = latestMarkdownContent["total"];
             markdown += `### Total \n`;
 
@@ -275,7 +220,7 @@ jobs:
             if(typeof branchesParameters === "object") {
               markdown += `| **${branchesParameters.pct}%** &nbsp; \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\`&nbsp;&nbsp; `;
             }
-
+            
             const functionsParameters = latestFileCoverage["functions"];
             if(typeof functionsParameters === "object") {
               markdown += `| **${functionsParameters.pct}%** &nbsp; \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\`&nbsp;&nbsp; `;
@@ -333,3 +278,4 @@ jobs:
               repo: context.repo.repo,
               body: markdown
             })
+
