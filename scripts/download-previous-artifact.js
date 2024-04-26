@@ -43,22 +43,23 @@ export async function script({ github, context, core }) {
   );
   if (artifact) {
     console.log("artifact: ", artifact);
-    const response = await github.rest.actions.downloadArtifact({
-      owner,
-      repo,
-      artifact_id: artifact.id,
-      archive_format: "zip",
-    });
-    console.log(
-      "my response: ",
-      response,
-      process.env.ARTIFACT_FILENAME,
-      Buffer.from(response.data)
-    );
-    fs.writeFileSync(process.env.ARTIFACT_FILENAME, Buffer.from(response.data));
-    execSync(
-      `unzip -o ${process.env.ARTIFACT_FILENAME} -d ${process.env.UNZIP_DIR}`
-    );
+    // const response = await github.rest.actions.downloadArtifact({
+    //   owner,
+    //   repo,
+    //   artifact_id: artifact.id,
+    //   archive_format: "zip",
+    // });
+    // console.log("myyy response: ", response);
+    // console.log(
+    //   "my response: ",
+    //   response,
+    //   process.env.ARTIFACT_FILENAME,
+    //   Buffer.from(response.data)
+    // );
+    // fs.writeFileSync(process.env.ARTIFACT_FILENAME, Buffer.from(response.data));
+    // execSync(
+    //   `unzip -o ${process.env.ARTIFACT_FILENAME} -d ${process.env.UNZIP_DIR}`
+    // );
 
     console.log("Artifact downloaded successfully");
   } else {
