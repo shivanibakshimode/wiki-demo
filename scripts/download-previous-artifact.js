@@ -32,7 +32,6 @@ export async function script({ github, context, core }) {
     return;
   }
 
-  console.log("runs.data.workflow_runs: ", runs.data.workflow_runs);
   const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
     owner,
     repo,
@@ -43,6 +42,7 @@ export async function script({ github, context, core }) {
     (artifact) => artifact.name === process.env.ARTIFACT_NAME
   );
   if (artifact) {
+    console.log("artifact: ", artifact);
     const response = await github.rest.actions.downloadArtifact({
       owner,
       repo,
