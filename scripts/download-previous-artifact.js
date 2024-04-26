@@ -48,6 +48,9 @@ export async function script({ github, context, core }) {
       repo,
       artifact_id: artifact.id,
       archive_format: "zip",
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
     });
     fs.writeFileSync(process.env.ARTIFACT_FILENAME, Buffer.from(response.data));
     execSync(
@@ -58,4 +61,4 @@ export async function script({ github, context, core }) {
   } else {
     core.setFailed("No artifact found");
   }
-};
+}
