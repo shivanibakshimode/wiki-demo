@@ -50,7 +50,7 @@ export async function script({ github, context, core }) {
       archive_format: "zip",
     });
     console.log(
-      "response: ",
+      "my response: ",
       response,
       process.env.ARTIFACT_FILENAME,
       Buffer.from(response.data)
