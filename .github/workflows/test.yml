@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      actions: read
     steps:
       - uses: actions/checkout@v4
       - name: Install Node
@@ -40,6 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      actions: read
     outputs:
       latestSummaryContent: ${{ steps.read-latest-report.outputs.latestSummaryContent }}
       previousSummaryContent: ${{ steps.read-previous-report.outputs.previousSummaryContent }}
