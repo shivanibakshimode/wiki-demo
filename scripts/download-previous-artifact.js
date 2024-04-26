@@ -43,13 +43,13 @@ export async function script({ github, context, core }) {
   );
   if (artifact) {
     console.log("artifact: ", artifact);
-    // const response = await github.rest.actions.downloadArtifact({
-    //   owner,
-    //   repo,
-    //   artifact_id: artifact.id,
-    //   archive_format: "zip",
-    // });
-    // console.log("myyy response: ", response);
+    const response = await github.rest.actions.downloadArtifact({
+      owner,
+      repo,
+      artifact_id: artifact.id,
+      archive_format: "zip",
+    });
+    console.log("myyy response: ", response);
     // console.log(
     //   "my response: ",
     //   response,
