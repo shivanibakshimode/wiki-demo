@@ -4,10 +4,10 @@ function addIndicator(latestValue, previousValue) {
   } else if (latestValue < previousValue) {
     return "&#8595;";
   }
-  return "-";
+  return "";
 }
 
-function addMarkdownContent(latestParameters, previousParameters) {
+function addPreviousMarkdownContent(latestParameters, previousParameters) {
   return `| **${latestParameters.pct}%** &nbsp;${addIndicator(
     latestParameters.pct,
     previousParameters.pct
@@ -47,7 +47,7 @@ export async function createComment({
       typeof latestStatementsParameters === "object" &&
       typeof previousStatementsParameters === "object"
     ) {
-      markdown += addMarkdownContent(
+      markdown += addPreviousMarkdownContent(
         latestStatementsParameters,
         previousStatementsParameters
       );
@@ -60,7 +60,7 @@ export async function createComment({
       typeof latestBranchesParameters === "object" &&
       typeof previousBranchesParameters === "object"
     ) {
-      markdown += addMarkdownContent(
+      markdown += addPreviousMarkdownContent(
         latestBranchesParameters,
         previousBranchesParameters
       );
@@ -73,7 +73,7 @@ export async function createComment({
       typeof latestFunctionsParameters === "object" &&
       typeof previousFunctionsParameters === "object"
     ) {
-      markdown += addMarkdownContent(
+      markdown += addPreviousMarkdownContent(
         latestFunctionsParameters,
         previousFunctionsParameters
       );
@@ -86,7 +86,7 @@ export async function createComment({
       typeof latestLinesParameters === "object" &&
       typeof previousLinesParameters === "object"
     ) {
-      markdown += addMarkdownContent(
+      markdown += addPreviousMarkdownContent(
         latestLinesParameters,
         previousLinesParameters
       );
@@ -164,15 +164,10 @@ export async function createComment({
           typeof latestStatementsParameters === "object" &&
           typeof previousStatementsParameters === "object"
         ) {
-          markdown += `| **${
-            latestStatementsParameters.pct
-          }%** &nbsp;${addIndicator(
-            latestStatementsParameters.pct,
-            previousStatementsParameters.pct
-          )} \`${latestStatementsParameters.covered}/${
-            latestStatementsParameters.total -
-            latestStatementsParameters.skipped
-          }\`&nbsp;&nbsp; `;
+          markdown += addPreviousMarkdownContent(
+            latestStatementsParameters,
+            previousStatementsParameters
+          );
         }
 
         const latestBranchesParameters = latestFileCoverage["branches"];
@@ -182,14 +177,10 @@ export async function createComment({
           typeof latestBranchesParameters === "object" &&
           typeof previousBranchesParameters === "object"
         ) {
-          markdown += `| **${
-            latestBranchesParameters.pct
-          }%** &nbsp;${addIndicator(
-            latestBranchesParameters.pct,
-            previousBranchesParameters.pct
-          )} \`${latestBranchesParameters.covered}/${
-            latestBranchesParameters.total - latestBranchesParameters.skipped
-          }\`&nbsp;&nbsp; `;
+          markdown += addPreviousMarkdownContent(
+            latestBranchesParameters,
+            previousBranchesParameters
+          );
         }
 
         const latestFunctionsParameters = latestFileCoverage["functions"];
@@ -199,14 +190,10 @@ export async function createComment({
           typeof latestFunctionsParameters === "object" &&
           typeof previousFunctionsParameters === "object"
         ) {
-          markdown += `| **${
-            latestFunctionsParameters.pct
-          }%** &nbsp;${addIndicator(
-            latestFunctionsParameters.pct,
-            previousFunctionsParameters.pct
-          )} \`${latestFunctionsParameters.covered}/${
-            latestFunctionsParameters.total - latestFunctionsParameters.skipped
-          }\`&nbsp;&nbsp; `;
+          markdown += addPreviousMarkdownContent(
+            latestFunctionsParameters,
+            previousFunctionsParameters
+          );
         }
 
         const latestLinesParameters = latestFileCoverage["lines"];
@@ -216,12 +203,10 @@ export async function createComment({
           typeof latestLinesParameters === "object" &&
           typeof previousLinesParameters === "object"
         ) {
-          markdown += `| **${latestLinesParameters.pct}%** &nbsp;${addIndicator(
-            latestLinesParameters.pct,
-            previousLinesParameters.pct
-          )} \`${latestLinesParameters.covered}/${
-            latestLinesParameters.total - latestLinesParameters.skipped
-          }\`&nbsp;&nbsp; `;
+          markdown += addPreviousMarkdownContent(
+            latestLinesParameters,
+            previousLinesParameters
+          );
         }
       } else {
         const statementsParameters = latestFileCoverage["statements"];
