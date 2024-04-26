@@ -7,6 +7,15 @@ function addIndicator(latestValue, previousValue) {
   return "-";
 }
 
+function addMarkdownContent(markdown, latestParameters, previousParameters) {
+  markdown += `| **${latestParameters.pct}%** &nbsp;${addIndicator(
+    latestParameters.pct,
+    previousParameters.pct
+  )} \`${latestParameters.covered}/${
+    latestParameters.total - latestParameters.skipped
+  }\`&nbsp;&nbsp; `;
+}
+
 export async function createComment({
   github,
   context,
@@ -38,14 +47,11 @@ export async function createComment({
       typeof latestStatementsParameters === "object" &&
       typeof previousStatementsParameters === "object"
     ) {
-      markdown += `| **${
-        latestStatementsParameters.pct
-      }%** &nbsp;${addIndicator(
-        latestStatementsParameters.pct,
-        previousStatementsParameters.pct
-      )} \`${latestStatementsParameters.covered}/${
-        latestStatementsParameters.total - latestStatementsParameters.skipped
-      }\`&nbsp;&nbsp; `;
+      addMarkdownContent(
+        markdown,
+        latestStatementsParameters,
+        previousStatementsParameters
+      );
     }
 
     const latestBranchesParameters = latestFileCoverage["branches"];
@@ -55,12 +61,11 @@ export async function createComment({
       typeof latestBranchesParameters === "object" &&
       typeof previousBranchesParameters === "object"
     ) {
-      markdown += `| **${latestBranchesParameters.pct}%** &nbsp;${addIndicator(
-        latestBranchesParameters.pct,
-        previousBranchesParameters.pct
-      )} \`${latestBranchesParameters.covered}/${
-        latestBranchesParameters.total - latestBranchesParameters.skipped
-      }\`&nbsp;&nbsp; `;
+      addMarkdownContent(
+        markdown,
+        latestBranchesParameters,
+        previousBranchesParameters
+      );
     }
 
     const latestFunctionsParameters = latestFileCoverage["functions"];
@@ -70,12 +75,11 @@ export async function createComment({
       typeof latestFunctionsParameters === "object" &&
       typeof previousFunctionsParameters === "object"
     ) {
-      markdown += `| **${latestFunctionsParameters.pct}%** &nbsp;${addIndicator(
-        latestFunctionsParameters.pct,
-        previousFunctionsParameters.pct
-      )} \`${latestFunctionsParameters.covered}/${
-        latestFunctionsParameters.total - latestFunctionsParameters.skipped
-      }\`&nbsp;&nbsp; `;
+      addMarkdownContent(
+        markdown,
+        latestFunctionsParameters,
+        previousFunctionsParameters
+      );
     }
 
     const latestLinesParameters = latestFileCoverage["lines"];
@@ -85,12 +89,11 @@ export async function createComment({
       typeof latestLinesParameters === "object" &&
       typeof previousLinesParameters === "object"
     ) {
-      markdown += `| **${latestLinesParameters.pct}%** &nbsp;${addIndicator(
-        latestLinesParameters.pct,
-        previousLinesParameters.pct
-      )} \`${latestLinesParameters.covered}/${
-        latestLinesParameters.total - latestLinesParameters.skipped
-      }\`&nbsp;&nbsp; `;
+      addMarkdownContent(
+        markdown,
+        latestLinesParameters,
+        previousLinesParameters
+      );
     }
   } else {
     const statementsParameters = latestFileCoverage["statements"];
@@ -139,11 +142,9 @@ export async function createComment({
   markdown += "\n";
 
   Object.keys(latestMarkdownContent).forEach((filePath) => {
-    console.log("filePath: ", filePath);
     const latestFileCoverage = latestMarkdownContent[filePath];
 
     const fileName = filePath.split(context.repo.repo).pop();
-    console.log("fileName: ", fileName);
     if (fileName !== "total") {
       markdown += `| ${fileName} `;
 
@@ -153,13 +154,11 @@ export async function createComment({
             const previousFileName = previousFilePath
               .split(context.repo.repo)
               .pop();
-            console.log("previousFileName: ", previousFileName, " fileName: ", fileName);
             if (previousFileName === fileName) {
               return previousFilePath;
             }
           }
         );
-        console.log("resolvedFilePath: ", resolvedFilePath);
         const previousFileCoverage = previousMarkdownContent[resolvedFilePath];
 
         const latestStatementsParameters = latestFileCoverage["statements"];
