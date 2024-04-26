@@ -7,25 +7,12 @@ function addIndicator(latestValue, previousValue) {
   return "-";
 }
 
-// function getFileNames(latestMarkdownContent, previousMarkdownContent) {
-//     let fileNames = [];
-//     Object.keys(latestMarkdownContent).forEach((filePath) => {
-//         const fileName = filePath.split(context.repo.repo).pop(); // src.js
-//         if(Object.keys(previousMarkdownContent).some((key) => key.indexOf(fileName))) {
-//             fileNames.push(fileName);
-//          }
-//     })
-//     console.log("fileNames: ", fileNames);
-//     return fileNames;
-// }
-
 export async function createComment({
   github,
   context,
   latestMarkdownContent,
   previousMarkdownContent,
 }) {
-  console.log("previousMarkdownContent: ", previousMarkdownContent);
   let markdown = "# Code Coverage Report\n\n";
 
   markdown += `### Total \n`;
@@ -38,7 +25,6 @@ export async function createComment({
   const previousMarkdownContentExists = Object.keys(
     previousMarkdownContent
   )?.length;
-  console.log("previousMarkdownContentExists: ", previousMarkdownContentExists);
 
   const latestFileCoverage = latestMarkdownContent["total"];
 
@@ -152,11 +138,6 @@ export async function createComment({
   markdown += "| :---: | :--------: | :------: | :-------: | :---: |";
   markdown += "\n";
 
-  //   let fileNames;
-  //   if (previousMarkdownContentExists) {
-  //     fileNames = getFileNames(latestMarkdownContent, previousMarkdownContent);
-  //   }
-
   Object.keys(latestMarkdownContent).forEach((filePath) => {
     console.log("filePath: ", filePath);
     const latestFileCoverage = latestMarkdownContent[filePath];
@@ -167,17 +148,19 @@ export async function createComment({
       markdown += `| ${fileName} `;
 
       if (previousMarkdownContentExists) {
-        const previousFilePath = Object.keys(previousMarkdownContent).filter(
+        const resolvedFilePath = Object.keys(previousMarkdownContent).filter(
           (previousFilePath) => {
             const previousFileName = previousFilePath
               .split(context.repo.repo)
               .pop();
-            console.log("previousFileName: ", previousFileName);
-            return previousFilePath.indexOf(fileName);
+            console.log("previousFileName: ", previousFileName, " fileName: ", fileName);
+            if (previousFileName === fileName) {
+              return previousFilePath;
+            }
           }
         );
-        console.log("previousFilePath: ", previousFilePath);
-        const previousFileCoverage = previousMarkdownContent[previousFilePath];
+        console.log("resolvedFilePath: ", resolvedFilePath);
+        const previousFileCoverage = previousMarkdownContent[resolvedFilePath];
 
         const latestStatementsParameters = latestFileCoverage["statements"];
         const previousStatementsParameters = previousFileCoverage["statements"];
