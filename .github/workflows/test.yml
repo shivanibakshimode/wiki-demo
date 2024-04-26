@@ -38,7 +38,7 @@ jobs:
 
             console.log("$WORKFLOW_FILENAME: ", ${{ env.WORKFLOW_FILENAME }})
             const workflow = workflows.data.workflows.find((w) =>
-              w.path.includes(${{ env.WORKFLOW_FILENAME }})
+              w.path.includes("${{ env.WORKFLOW_FILENAME }}")
             );
 
             if (!workflow) {
@@ -66,7 +66,7 @@ jobs:
             });
 
             const artifact = artifacts.data.artifacts.find(
-              (artifact) => artifact.name === ${{ env.ARTIFACT_NAME }}
+              (artifact) => artifact.name === "${{ env.ARTIFACT_NAME }}"
             );
             if (artifact) {
               console.log("artifact: ", artifact);
