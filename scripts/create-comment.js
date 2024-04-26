@@ -8,7 +8,7 @@ function addIndicator(latestValue, previousValue) {
 }
 
 function addMarkdownContent(markdown, latestParameters, previousParameters) {
-  markdown += `| **${latestParameters.pct}%** &nbsp;${addIndicator(
+  return markdown += `| **${latestParameters.pct}%** &nbsp;${addIndicator(
     latestParameters.pct,
     previousParameters.pct
   )} \`${latestParameters.covered}/${
