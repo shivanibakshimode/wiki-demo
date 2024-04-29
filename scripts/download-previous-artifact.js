@@ -10,6 +10,7 @@ export async function downloadPreviousArtifact({ github, context, core }) {
     repo,
   });
 
+  console.log("workflows: ", workflows)
   const workflow = workflows.data.workflows.find((workflow) =>
     workflow.path.includes(process.env.WORKFLOW_FILENAME)
   );
@@ -27,6 +28,7 @@ export async function downloadPreviousArtifact({ github, context, core }) {
     per_page: 1,
   });
 
+  console.log("runs: ", runs)
   if (runs.data.total_count === 0) {
     core.setFailed("No workflow runs found");
     return;
@@ -38,10 +40,12 @@ export async function downloadPreviousArtifact({ github, context, core }) {
     run_id: runs.data.workflow_runs[0].id,
   });
 
+  console.log("artifacts: ", artifacts)
   const artifact = artifacts.data.artifacts.find(
     (artifact) => artifact.name === process.env.ARTIFACT_NAME
   );
   if (artifact) {
+    console.log("artifact: ", artifact)
     const response = await github.rest.actions.downloadArtifact({
       owner,
       repo,
