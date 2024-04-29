@@ -1,7 +1,7 @@
 import fs from "fs";
 import { execSync } from "node:child_process";
 
-export async function script({ github, context, core }) {
+export async function downloadPreviousArtifact({ github, context, core }) {
   const owner = context.repo.owner;
   const repo = context.repo.repo;
 
@@ -10,12 +10,12 @@ export async function script({ github, context, core }) {
     repo,
   });
 
-  const workflow = workflows.data.workflows.find((w) =>
-    w.path.includes(process.env.WORKFLOW_FILENAME)
+  const workflow = workflows.data.workflows.find((workflow) =>
+    workflow.path.includes(process.env.WORKFLOW_FILENAME)
   );
 
   if (!workflow) {
-    core.setFailed("No workflow found");
+    core.setFailed("No repo workflows found");
     return;
   }
 
@@ -28,7 +28,7 @@ export async function script({ github, context, core }) {
   });
 
   if (runs.data.total_count === 0) {
-    core.setFailed("No runs found");
+    core.setFailed("No workflow runs found");
     return;
   }
 
@@ -50,7 +50,7 @@ export async function script({ github, context, core }) {
     });
     fs.writeFileSync(process.env.ARTIFACT_FILENAME, Buffer.from(response.data));
     execSync(
-      `unzip -o ${process.env.ARTIFACT_FILENAME} -d ${process.env.UNZIP_DIR}`
+      `unzip -o ${process.env.ARTIFACT_FILENAME} -d ${process.env.UNZIP_DIRECTORY}`
     );
 
     console.log("Artifact downloaded successfully");

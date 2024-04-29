@@ -8,7 +8,6 @@ jobs:
     permissions:
       contents: read
       actions: write
-      packages: write
     outputs:
       previousSummaryContent: ${{ steps.read-previous-report.outputs.previousSummaryContent }}
     steps:
@@ -27,11 +26,11 @@ jobs:
           WORKFLOW_FILENAME: test.yml
           ARTIFACT_NAME: coverage-previous
           ARTIFACT_FILENAME: coverage-previous.zip
-          UNZIP_DIR: ./coverage-previous
+          UNZIP_DIRECTORY: ./coverage-previous
         with:
           script: |
-            const { script } = await import('${{ github.workspace }}/scripts/download-previous-artifact.js')
-            await script({github, context, core})
+            const { downloadPreviousArtifact } = await import('${{ github.workspace }}/scripts/download-previous-artifact.js')
+            await downloadPreviousArtifact({github, context, core})
       - name: Read Previous Coverage Report
         id: read-previous-report
         run: |
@@ -44,7 +43,7 @@ jobs:
             # end of optional handling for multi line json
             echo "::set-output name=previousSummaryContent::$previousSummaryContent"
           else 
-            echo "No coverage report found"
+            echo "No previous coverage report found"
           fi
       - name: Upload Latest Coverage
         uses: actions/upload-artifact@v4
@@ -89,7 +88,6 @@ jobs:
       contents: write
       pull-requests: write
       repository-projects: write
-      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4

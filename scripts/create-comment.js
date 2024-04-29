@@ -4,7 +4,7 @@ function addIndicator(latestValue, previousValue) {
   } else if (latestValue < previousValue) {
     return "&#8595;";
   }
-  return "";
+  return "-";
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
