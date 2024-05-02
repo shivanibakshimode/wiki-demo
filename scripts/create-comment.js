@@ -1,6 +1,6 @@
 function addIndicator(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return "&#8593;";
+    return "$\\uparrow$";
   } else if (latestValue < previousValue) {
     return "&#8595;";
   }
@@ -8,7 +8,7 @@ function addIndicator(latestValue, previousValue) {
 }
 
 function addRedColor(value) {
-  return `$\\color{red}{$(${value}\%)$}$`;
+  return `$\\color{red}{${value}}$`;
 }
 
 function addGreenColor(value) {
