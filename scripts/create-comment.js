@@ -41,8 +41,12 @@ function addPreviousMarkdownContent(latestParameters, previousParameters) {
   )} ${addColorToSymbol(
     latestParameters.pct,
     previousParameters.pct,
-    "\%"
-  )}** &nbsp;${addIndicator(latestParameters.pct, previousParameters.pct)} \`${
+    "%"
+  )}** &nbsp;${addColorToSymbol(
+    latestParameters.pct,
+    previousParameters.pct,
+    "↑"
+  )} \`${
     latestParameters.covered
   }/${latestParameters.total - latestParameters.skipped}\`&nbsp;&nbsp; `;
 }
