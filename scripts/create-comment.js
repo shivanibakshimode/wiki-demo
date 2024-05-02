@@ -15,7 +15,7 @@ function addGreenColor(value) {
   return `$\\color{green}{${value}}$`;
 }
 
-function addColor(latestValue, previousValue) {
+function addColorToText(latestValue, previousValue) {
   if (latestValue > previousValue) {
     return addGreenColor(latestValue);
   } else if (latestValue < previousValue) {
@@ -24,8 +24,20 @@ function addColor(latestValue, previousValue) {
   return addRedColor(`${latestValue}`); // TODO: change to green color
 }
 
+function addColorToSymbol(latestValue, previousValue) {
+  if (latestValue > previousValue) {
+    return `$\\color{green}{\%}$`;
+  } else if (latestValue < previousValue) {
+    return `$\\color{red}{\%}$`;
+  }
+  return `$\\color{red}{\%}$`; // TODO: change to green color
+}
+
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
-  return `| **${addColor(
+  return `| **${addColorToText(
+    latestParameters.pct,
+    previousParameters.pct
+  )}${addColorToSymbol(
     latestParameters.pct,
     previousParameters.pct
   )}** &nbsp;${addIndicator(latestParameters.pct, previousParameters.pct)} \`${
