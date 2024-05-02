@@ -26,11 +26,11 @@ function addColorToText(latestValue, previousValue) {
 
 function addColorToSymbol(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return `$\\color{green} \\% $`;
+    return `$\\color{green}{$y=f(x)$}$`;
   } else if (latestValue < previousValue) {
-    return `$\\color{red} \\% $`;
+    return `$\\color{red}{$y=f(x)$}$`;
   }
-  return `$\\color{red} \\% $`; // TODO: change to green color
+  return `$\\color{red}{$y=f(x)$}$`; // TODO: change to green color
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
