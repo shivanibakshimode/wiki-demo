@@ -25,13 +25,13 @@ function addColorToText(latestValue, previousValue) {
 }
 
 function addColorToSymbol(latestValue, previousValue, symbol) {
-  console.log("symbol: ", symbol, `$\\color{green}{\\%}$`, `$\\color{green}\\${symbol}$`)
+  console.log("symbol: ", symbol, `$\\color{green}{\\%}$`, `$\\color{green}\\\\${symbol}$`)
   if (latestValue > previousValue) {
-    return `$\\color{green}\\${symbol}$`;
+    return `$\\color{green}\\\\${symbol}$`;
   } else if (latestValue < previousValue) {
-    return `$\\color{red}\\${symbol}$`;
+    return `$\\color{red}\\\\${symbol}$`;
   }
-  return `$\\color{red}\\${symbol}$`; // TODO: change to green color
+  return `$\\color{red}\\\\${symbol}$`; // TODO: change to green color
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
