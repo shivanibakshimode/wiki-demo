@@ -8,7 +8,7 @@ function addIndicator(latestValue, previousValue) {
 }
 
 function addRedColor(value) {
-  return `$\\color{red}{${value}}$`; // $\color{red}{0}$
+  return `$\\color{red}{${value}}$`;
 }
 
 function addGreenColor(value) {
@@ -37,7 +37,7 @@ function addPreviousMarkdownContent(latestParameters, previousParameters) {
   return `| **${addColorToText(
     latestParameters.pct,
     previousParameters.pct
-  )} ${addColorToSymbol(
+  )}${addColorToSymbol(
     latestParameters.pct,
     previousParameters.pct,
     "%"
