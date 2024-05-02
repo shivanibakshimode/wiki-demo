@@ -7,13 +7,21 @@ function addIndicator(latestValue, previousValue) {
   return "-";
 }
 
+function addRedColor(value) {
+  return `$\\color{red}{${value}}$`;
+}
+
+function addGreenColor(value) {
+  return `$\\color{green}{${value}}$`;
+}
+
 function addColor(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return `$\\color{green}{${latestValue}}$`;
+    return addGreenColor(`${latestValue}%`);
   } else if (latestValue < previousValue) {
-    return `$\\color{red}{${latestValue}}$`;
+    return addRedColor(`${latestValue}%`);
   }
-  return `$\\color{red}{${latestValue}}$`; // TODO: change to green color
+  return addRedColor(`${latestValue}%`); // TODO: change to green color
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
