@@ -8,7 +8,12 @@ function addIndicator(latestValue, previousValue) {
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
-  return `| $$\color{red}Red$$ &nbsp; **${latestParameters.pct}%** &nbsp;${addIndicator(
+  // const pct = latestParameters.pct > 50 ? $${\color{red}Red}$$ : ${{\color{Goldenrod}\Huge{\textsf{  Hi\ there\ \}}}}\$;
+  let percentage;
+  if(latestParameters.pct > 50) {
+    // percentage = $${\color{red}latestParameters.pct}$$;
+  }
+  return `| $y = \\color{red}{" + red color + "} + ".. +"$ **${latestParameters.pct}%** &nbsp;${addIndicator(
     latestParameters.pct,
     previousParameters.pct
   )} \`${latestParameters.covered}/${
