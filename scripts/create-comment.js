@@ -9,11 +9,11 @@ function addIndicator(latestValue, previousValue) {
 
 function addColor(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return `$\\color{green}{${latestValue}\%}$`;
+    return `$\\color{green}{${latestValue} + %}$`;
   } else if (latestValue < previousValue) {
-    return `$\\color{red}{${latestValue}\%}$`;
+    return `$\\color{red}{${latestValue} + %}$`;
   }
-  return `$\\color{red}{${latestValue}\%}$`; // TODO: change to green color
+  return `$\\color{red}{${latestValue} + %}$`; // TODO: change to green color
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
