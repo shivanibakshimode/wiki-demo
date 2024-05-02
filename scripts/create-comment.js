@@ -1,6 +1,6 @@
 function addIndicator(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return "$\\uparrow$";
+    return "&#8593;";
   } else if (latestValue < previousValue) {
     return "&#8595;";
   }
