@@ -26,7 +26,7 @@ function addColorToText(latestValue, previousValue) {
 
 function addColorToSymbol(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return "$\\color{green}{" + "%" + "}$";
+    return "$\\color{green}{\%}$";
   } else if (latestValue < previousValue) {
     return `$\\color{red}{\\%}$`;
   }
@@ -37,7 +37,7 @@ function addPreviousMarkdownContent(latestParameters, previousParameters) {
   return `| **${addColorToText(
     latestParameters.pct,
     previousParameters.pct
-  )} ${addColorToSymbol(
+  )} &nbsp; ${addColorToSymbol(
     latestParameters.pct,
     previousParameters.pct
   )}** &nbsp;${addIndicator(latestParameters.pct, previousParameters.pct)} \`${
