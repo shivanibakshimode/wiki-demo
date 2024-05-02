@@ -1,8 +1,8 @@
 function addIndicator(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return "&#8593;";
+    return `$\\color{green}{"&#8593;"}$`;
   } else if (latestValue < previousValue) {
-    return "&#8595;";
+    return `$\\color{red}{"&#8595;"}$`;
   }
   return "-";
 }
@@ -17,18 +17,18 @@ function addGreenColor(value) {
 
 function addColor(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return addGreenColor(`${latestValue}%`);
+    return addGreenColor(`${latestValue}`);
   } else if (latestValue < previousValue) {
-    return addRedColor(`${latestValue}%`);
+    return addRedColor(`${latestValue}`);
   }
-  return addRedColor(`${latestValue}%`); // TODO: change to green color
+  return addRedColor(`${latestValue}`); // TODO: change to green color
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
   return `| **${addColor(
     latestParameters.pct,
     previousParameters.pct
-  )}%** &nbsp;${addIndicator(latestParameters.pct, previousParameters.pct)} \`${
+  )}** &nbsp;${addIndicator(latestParameters.pct, previousParameters.pct)} \`${
     latestParameters.covered
   }/${latestParameters.total - latestParameters.skipped}\`&nbsp;&nbsp; `;
 }
