@@ -17,7 +17,7 @@ function addGreenColor(value) {
 
 function addColor(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return addGreenColor(`${latestValue}\\%`);
+    return addGreenColor(`${latestValue}\\\%`);
   } else if (latestValue < previousValue) {
     return addRedColor(`${latestValue}`);
   }
