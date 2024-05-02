@@ -1,19 +1,19 @@
 function addIndicator(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return "&#8593;";
+    return `$\\color{green}{"&#8593;"}$`;
   } else if (latestValue < previousValue) {
-    return "&#8595;";
+    return `$\\color{green}{"&#8595;"}$`;
   }
   return "-";
 }
 
 function addColor(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return `$\\color{green}{${latestValue}}$`;
+    return `$\\color{green}{${latestValue}\%}$`;
   } else if (latestValue < previousValue) {
-    return `$\\color{red}{${latestValue}}$`;
+    return `$\\color{red}{${latestValue}\%}$`;
   }
-  return `$\\color{green}{${latestValue}}$`;
+  return `$\\color{red}{${latestValue}\%}$`; // TODO: change to green color
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
