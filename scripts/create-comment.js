@@ -8,7 +8,7 @@ function addIndicator(latestValue, previousValue) {
 }
 
 function addRedColor(value) {
-  return `$\\color{red}{${value}}$`;
+  return `$\\color{red}{${value}}$`; // $\color{red}{0}$
 }
 
 function addGreenColor(value) {
@@ -24,13 +24,14 @@ function addColorToText(latestValue, previousValue) {
   return addRedColor(`${latestValue}`); // TODO: change to green color
 }
 
-function addColorToSymbol(latestValue, previousValue) {
+function addColorToSymbol(latestValue, previousValue, symbol) {
+  console.log("symbol: ", symbol, `$\\color{green}{${symbol}}$`, `$\\color{green}{\\%}$`)
   if (latestValue > previousValue) {
-    return `$\\color{green}{$y=f(x)$}$`;
+    return `$\\color{green}{${symbol}}$`;
   } else if (latestValue < previousValue) {
-    return `$\\color{red}{$y=f(x)$}$`;
+    return `$\\color{red}{${symbol}}$`;
   }
-  return `$\\color{red}{$y=f(x)$}$`; // TODO: change to green color
+  return `$\\color{red}{${symbol}}$`; // TODO: change to green color
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
@@ -40,6 +41,7 @@ function addPreviousMarkdownContent(latestParameters, previousParameters) {
   )} ${addColorToSymbol(
     latestParameters.pct,
     previousParameters.pct,
+    "\%"
   )}** &nbsp;${addIndicator(latestParameters.pct, previousParameters.pct)} \`${
     latestParameters.covered
   }/${latestParameters.total - latestParameters.skipped}\`&nbsp;&nbsp; `;
