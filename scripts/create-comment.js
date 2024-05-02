@@ -4,7 +4,7 @@ function addIndicator(latestValue, previousValue) {
   } else if (latestValue < previousValue) {
     return "&#8595;";
   }
-  return "-";
+  return "";
 }
 
 function addRedColor(value) {
@@ -21,17 +21,16 @@ function addColorToText(latestValue, previousValue) {
   } else if (latestValue < previousValue) {
     return addRedColor(latestValue);
   }
-  return addRedColor(`${latestValue}`); // TODO: change to green color
+  return `${latestValue}`;
 }
 
 function addColorToSymbol(latestValue, previousValue, symbol) {
-  console.log("symbol: ", symbol, `$\\color{green}{\\%}$`, `$\\color{green}\\\\${symbol}$`)
   if (latestValue > previousValue) {
     return `$\\color{green}\\\\${symbol}$`;
   } else if (latestValue < previousValue) {
     return `$\\color{red}\\\\${symbol}$`;
   }
-  return `$\\color{red}\\\\${symbol}$`; // TODO: change to green color
+  return `$\\\\${symbol}$`;
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
@@ -42,11 +41,7 @@ function addPreviousMarkdownContent(latestParameters, previousParameters) {
     latestParameters.pct,
     previousParameters.pct,
     "%"
-  )}** &nbsp;${addColorToSymbol(
-    latestParameters.pct,
-    previousParameters.pct,
-    "↑"
-  )} \`${
+  )}** &nbsp;${addIndicator(latestParameters.pct, previousParameters.pct)} \`${
     latestParameters.covered
   }/${latestParameters.total - latestParameters.skipped}\`&nbsp;&nbsp; `;
 }
