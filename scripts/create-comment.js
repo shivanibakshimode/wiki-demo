@@ -9,11 +9,11 @@ function addIndicator(latestValue, previousValue) {
 
 function addColor(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return `$\\color{green}{${latestParameters.pct}%}$`;
+    return `$\\color{green}{${latestValue}%}$`;
   } else if (latestValue < previousValue) {
-    return `$\\color{red}{${latestParameters.pct}%}$`;
+    return `$\\color{red}{${latestValue}%}$`;
   }
-  return `$\\color{green}{${latestParameters.pct}%}$`;
+  return `$\\color{green}{${latestValue}%}$`;
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
