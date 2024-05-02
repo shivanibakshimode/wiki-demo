@@ -1,10 +1,10 @@
 function addIndicator(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return "&#x1F53B;";
+    return "&#x25B2;";
   } else if (latestValue < previousValue) {
-    return "&#8595;";
+    return "&#x25BC;";
   }
-  return "";
+  return "&#x25BC;";
 }
 
 function addRedColor(value) {
@@ -34,14 +34,14 @@ function addColorToSymbol(latestValue, previousValue, symbol) {
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
-  return `| **${addColorToText(
+  return `| ${addColorToText(
     latestParameters.pct,
     previousParameters.pct
   )} ${addColorToSymbol(
     latestParameters.pct,
     previousParameters.pct,
     "%"
-  )}** &nbsp;${addIndicator(latestParameters.pct, previousParameters.pct)} \`${
+  )} &nbsp;${addIndicator(latestParameters.pct, previousParameters.pct)} \`${
     latestParameters.covered
   }/${latestParameters.total - latestParameters.skipped}\`&nbsp;&nbsp; `;
 }
