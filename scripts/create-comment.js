@@ -1,6 +1,6 @@
 function addIndicator(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return "&#8593;";
+    return "&#x1F53B;";
   } else if (latestValue < previousValue) {
     return "&#8595;";
   }
@@ -37,7 +37,7 @@ function addPreviousMarkdownContent(latestParameters, previousParameters) {
   return `| **${addColorToText(
     latestParameters.pct,
     previousParameters.pct
-  )}${addColorToSymbol(
+  )} ${addColorToSymbol(
     latestParameters.pct,
     previousParameters.pct,
     "%"
