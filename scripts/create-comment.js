@@ -8,7 +8,7 @@ function addIndicator(latestValue, previousValue) {
 }
 
 function addRedColor(value) {
-  return `$\\color{red}{${value}}{%}$`;
+  return `$\\color{red}{${value}}{\%}$`;
 }
 
 function addGreenColor(value) {
