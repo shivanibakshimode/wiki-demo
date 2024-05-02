@@ -7,14 +7,22 @@ function addIndicator(latestValue, previousValue) {
   return "-";
 }
 
+function addColor(latestValue, previousValue) {
+  if (latestValue > previousValue) {
+    return `$\\color{green}{${latestParameters.pct}%}$`;
+  } else if (latestValue < previousValue) {
+    return `$\\color{red}{${latestParameters.pct}%}$`;
+  }
+  return `$\\color{green}{${latestParameters.pct}%}$`;
+}
+
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
-  const color = latestParameters > 50 ? "green" : "red";
-  return `| $\\color{${color}}{${latestParameters.pct}%}$ **${latestParameters.pct}%** &nbsp;${addIndicator(
+  return `| ${addColor(
     latestParameters.pct,
     previousParameters.pct
-  )} \`${latestParameters.covered}/${
-    latestParameters.total - latestParameters.skipped
-  }\`&nbsp;&nbsp; `;
+  )} &nbsp;${addIndicator(latestParameters.pct, previousParameters.pct)} \`${
+    latestParameters.covered
+  }/${latestParameters.total - latestParameters.skipped}\`&nbsp;&nbsp; `;
 }
 
 export async function createComment({
