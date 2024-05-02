@@ -12,8 +12,9 @@ function addPreviousMarkdownContent(latestParameters, previousParameters) {
   let percentage;
   if(latestParameters.pct > 50) {
     // percentage = $${\color{red}latestParameters.pct}$$;
+    // \\color{red}{${latestParameters.pct}}$
   }
-  return `| \\color{red}{${latestParameters.pct}}$ **${latestParameters.pct}%** &nbsp;${addIndicator(
+  return `| \\color{red}{red}$ **${latestParameters.pct}%** &nbsp;${addIndicator(
     latestParameters.pct,
     previousParameters.pct
   )} \`${latestParameters.covered}/${
