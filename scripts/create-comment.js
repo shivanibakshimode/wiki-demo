@@ -1,10 +1,10 @@
 function addIndicator(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return "🟢";
+    return "&#x25B2;";
   } else if (latestValue < previousValue) {
-    return "🔻";
+    return "&#x25BC;";
   }
-  return "🔻";
+  return "";
 }
 
 function addRedColor(value) {
