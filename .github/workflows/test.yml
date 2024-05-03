@@ -15,6 +15,11 @@ jobs:
         run: npm install
       - name: Test
         run: npx vitest --coverage.enabled true
+      - name: Upload Latest Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-latest
+          path: coverage
       
   read-previous:
     needs: test
@@ -50,14 +55,8 @@ jobs:
           else 
             echo "No previous coverage report found"
           fi
-          previousSummaryContent=""
-          echo "Yessss contentt: $previousSummaryContent"
+          echo "Yessss contentt: $previousSummaryContent == null"
           echo "::set-output name=previousSummaryContent::$previousSummaryContent"
-      - name: Upload Latest Coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-latest
-          path: coverage
 
   read-latest:
     needs: [test, read-previous]
@@ -108,10 +107,10 @@ jobs:
             const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.read-latest.outputs.latestSummaryContent }}));
             console.log("hereeeee");
             let previousMarkdownContent = {};
-            console.log("condition 2: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == "")
-            console.log("condition 1: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == true)
-            console.log("conditin: ", ${{ needs.read-previous.outputs.previousSummaryContent }} != false)
-            if(${{ needs.read-previous.outputs.previousSummaryContent }} != false) {
+            console.log("condition 2: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == null)
+            console.log("condition 1: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == null)
+            console.log("conditin: ", ${{ needs.read-previous.outputs.previousSummaryContent }} != null)
+            if(${{ needs.read-previous.outputs.previousSummaryContent }} != null) {
               previousMarkdownContent = JSON.parse(JSON.stringify(${{ needs.read-previous.outputs.previousSummaryContent }}))
             }
 
