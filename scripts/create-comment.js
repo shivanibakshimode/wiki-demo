@@ -1,19 +1,49 @@
 function addIndicator(latestValue, previousValue) {
   if (latestValue > previousValue) {
-    return "&#8593;";
+    return "&#x25B2;";
   } else if (latestValue < previousValue) {
-    return "&#8595;";
+    return "&#x25BC;";
   }
-  return "-";
+  return "";
+}
+
+function addRedColor(value) {
+  return `$\\color{red}{${value}}$`;
+}
+
+function addGreenColor(value) {
+  return `$\\color{green}{${value}}$`;
+}
+
+function addColorToText(latestValue, previousValue) {
+  if (latestValue > previousValue) {
+    return addGreenColor(latestValue);
+  } else if (latestValue < previousValue) {
+    return addRedColor(latestValue);
+  }
+  return `${latestValue}`;
+}
+
+function addColorToSymbol(latestValue, previousValue, symbol) {
+  if (latestValue > previousValue) {
+    return `$\\color{green}\\\\${symbol}$`;
+  } else if (latestValue < previousValue) {
+    return `$\\color{red}\\\\${symbol}$`;
+  }
+  return `$\\\\${symbol}$`;
 }
 
 function addPreviousMarkdownContent(latestParameters, previousParameters) {
-  return `| **${latestParameters.pct}%** &nbsp;${addIndicator(
+  return `| ${addColorToText(
     latestParameters.pct,
     previousParameters.pct
-  )} \`${latestParameters.covered}/${
-    latestParameters.total - latestParameters.skipped
-  }\`&nbsp;&nbsp; `;
+  )} ${addColorToSymbol(
+    latestParameters.pct,
+    previousParameters.pct,
+    "%"
+  )} &nbsp;${addIndicator(latestParameters.pct, previousParameters.pct)} \`${
+    latestParameters.covered
+  }/${latestParameters.total - latestParameters.skipped}\`&nbsp;&nbsp; `;
 }
 
 export async function createComment({

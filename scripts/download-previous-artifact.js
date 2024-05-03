@@ -41,6 +41,7 @@ export async function downloadPreviousArtifact({ github, context, core }) {
   });
 
   console.log("artifacts: ", artifacts)
+  console.log("artifacts data: ", artifacts.data.artifacts)
   const artifact = artifacts.data.artifacts.find(
     (artifact) => artifact.name === process.env.ARTIFACT_NAME
   );
