@@ -106,6 +106,7 @@ jobs:
           script: |
             const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.read-latest.outputs.latestSummaryContent }}));
             let previousMarkdownContent = {};
+            console.log("condition 2: ", ${{ needs.read-previous.outputs.previousSummaryContent == false }})
             console.log("condition 2: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == false)
             console.log("conditin: ", ${{ needs.read-previous.outputs.previousSummaryContent }} != false)
             if(${{ needs.read-previous.outputs.previousSummaryContent }} != false) {
