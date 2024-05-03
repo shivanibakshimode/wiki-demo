@@ -1,97 +1,144 @@
-name: "Test"
-on: push
-
+name: "Test Workflow"
+on:
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
 jobs:
   test:
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
-
     steps:
       - uses: actions/checkout@v4
-      - name: "Install Node"
+      - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20.x"
-      - name: "Install Deps"
+          node-version: 18.x
+      - name: Install Deps
         run: npm install
-      - name: "Test"
+      - name: Test
         run: npx vitest --coverage.enabled true
-
-      - name: "Upload Coverage"
+      - name: Upload Coverage
         uses: actions/upload-artifact@v4
         with:
           name: coverage
-          path: coverage/index.html
+          path: coverage
 
   report:
     needs: test
     runs-on: ubuntu-latest
-
-    permissions:
-      pull-requests: write
-      contents: read
-
+    outputs:
+      summaryContent: ${{ steps.read-report.outputs.summaryContent }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Downlod Artifacts 
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
-      
       - name: List Files
         run: ls -R
+      - name: Read Coverage Report
+        id: read-report
+        run: |
+          summaryContent=$(cat ./coverage/coverage-summary.json)
+          # the following lines are only required for multi line json
+          summaryContent="${summaryContent//'%'/'%25'}"
+          summaryContent="${summaryContent//$'\n'/'%0A'}"
+          summaryContent="${summaryContent//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=summaryContent::$summaryContent"
 
   comment:
     needs: report
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
       pull-requests: write
       repository-projects: write
       id-token: write
-
-    if: "!startsWith(github.event.pull_request.title, 'Feature')"
-
     steps:
-      - uses: actions/github-script@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create PR Comment
+        id: create-comment
+        uses: actions/github-script@v5
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            const markdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.summaryContent }}))
+
+            let markdown = '# Code Coverage Report\n\n';
+            
+            const fileCoverage = markdownContent["total"];
+            markdown += `### Total \n`;
+
+            markdown += '| Statements | Branches | Functions | Lines |';
+            markdown += '\n';
+            markdown += '| :--------: | :------: | :-------: | :---: |';
+            markdown += '\n';
+
+            const statementsParameters = fileCoverage["statements"];
+            if(typeof statementsParameters === "object") {
+              markdown += `| **${statementsParameters.pct}%** &nbsp; \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\`&nbsp;&nbsp; `;
+            }
+
+            const branchesParameters = fileCoverage["branches"];
+            if(typeof branchesParameters === "object") {
+              markdown += `| **${branchesParameters.pct}%** &nbsp; \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\`&nbsp;&nbsp; `;
+            }
+            
+            const functionsParameters = fileCoverage["functions"];
+            if(typeof functionsParameters === "object") {
+              markdown += `| **${functionsParameters.pct}%** &nbsp; \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\`&nbsp;&nbsp; `;
+            }
+
+            const linesParameters = fileCoverage["lines"];
+            if(typeof linesParameters === "object") {
+              markdown += `| **${linesParameters.pct}%** &nbsp; \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\`&nbsp;&nbsp; `;
+            }
+            markdown += '\n';
+
+            markdown += `<details>\n`;
+            markdown += '<summary>\n\n### View Additional Reports\n\n</summary>\n\n';
+
+            markdown += '| File  | Statements | Branches | Functions | Lines |';
+            markdown += '\n';
+            markdown += '| :---: | :--------: | :------: | :-------: | :---: |';
+            markdown += '\n';
+
+            Object.keys(markdownContent).forEach((filePath) => {
+                const fileCoverage = markdownContent[filePath];
+
+                const fileName = filePath.split(context.repo.repo).pop();
+                if(fileName !== "total") {
+                  markdown += `| ${fileName} `;
+
+                  const statementsParameters = fileCoverage["statements"];
+                  if(typeof statementsParameters === "object") {
+                    markdown += `| **${statementsParameters.pct}%**   \`${statementsParameters.covered}/${statementsParameters.total - statementsParameters.skipped}\` `;
+                  }
+
+                  const branchesParameters = fileCoverage["branches"];
+                  if(typeof branchesParameters === "object") {
+                    markdown += `| **${branchesParameters.pct}%**   \`${branchesParameters.covered}/${branchesParameters.total - branchesParameters.skipped}\` `;
+                  }
+                  
+                  const functionsParameters = fileCoverage["functions"];
+                  if(typeof functionsParameters === "object") {
+                    markdown += `| **${functionsParameters.pct}%**   \`${functionsParameters.covered}/${functionsParameters.total - functionsParameters.skipped}\` `;
+                  }
+
+                  const linesParameters = fileCoverage["lines"];
+                  if(typeof linesParameters === "object") {
+                    markdown += `| **${linesParameters.pct}%**   \`${linesParameters.covered}/${linesParameters.total - linesParameters.skipped}\` `;
+                  }
+
+                  markdown += '\n';
+                }
+            });
+            markdown += `</details>`
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Test comment!'
+              body: markdown
             })
-    # runs-on: ubuntu-latest
 
-    # permissions:
-    #   contents: write
-    #   pull-requests: write
-    #   repository-projects: write
-    #   id-token: write
-
-    # steps:
-    #   # - name: Checkout
-    #   #   uses: actions/checkout@v4
-
-    #   # - name: "Report Coverage"
-    #   #   shell: bash
-    #   #   run: |
-    #   #     value=`cat coverage/index.html`
-    #   #     echo The result is $value
-
-    #   - name: Add comment 
-    #     uses: actions/github-script@v5
-    #     with:
-    #       github-token: ${{secrets.GITHUB_TOKEN}}
-    #       script: |
-    #         github.rest.issues.createComment({
-    #           issue_number: context.issue.number,
-    #           owner: context.repo.owner,
-    #           repo: context.repo.repo,
-    #           body: 'Test comment'
-    #         })
