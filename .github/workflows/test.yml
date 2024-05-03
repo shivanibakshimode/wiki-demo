@@ -15,6 +15,11 @@ jobs:
         run: npm install
       - name: Test
         run: npx vitest --coverage.enabled true
+      - name: Upload Latest Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-latest
+          path: coverage
       
   read-previous:
     needs: test
@@ -25,6 +30,7 @@ jobs:
     outputs:
       previousSummaryContent: ${{ steps.read-previous-report.outputs.previousSummaryContent }}
     steps:
+      - uses: actions/checkout@v4
       - name: Download Previous Artifacts
         uses: actions/github-script@v6
         env:
@@ -51,11 +57,6 @@ jobs:
             echo "No previous coverage report found"
           fi
           echo "::set-output name=previousSummaryContent::$previousSummaryContent"
-      - name: Upload Latest Coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-latest
-          path: coverage
 
   read-latest:
     needs: [test, read-previous]
