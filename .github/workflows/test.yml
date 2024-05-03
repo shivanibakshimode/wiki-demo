@@ -30,22 +30,21 @@ jobs:
     outputs:
       previousSummaryContent: ${{ steps.read-previous-report.outputs.previousSummaryContent }}
     steps:
-      # - name: Download Previous Artifacts
-      #   uses: actions/github-script@v6
-      #   env:
-      #     WORKFLOW_FILENAME: test.yml
-      #     ARTIFACT_NAME: coverage-previous
-      #     ARTIFACT_FILENAME: coverage-previous.zip
-      #     UNZIP_DIRECTORY: ./coverage-previous
-      #   with:
-      #     script: |
-      #       const { downloadPreviousArtifact } = await import('${{ github.workspace }}/scripts/download-previous-artifact.js')
-      #       await downloadPreviousArtifact({github, context})
+      - name: Download Previous Artifacts
+        uses: actions/github-script@v6
+        env:
+          WORKFLOW_FILENAME: test.yml
+          ARTIFACT_NAME: coverage-previous
+          ARTIFACT_FILENAME: coverage-previous.zip
+          UNZIP_DIRECTORY: ./coverage-previous
+        with:
+          script: |
+            const { downloadPreviousArtifact } = await import('${{ github.workspace }}/scripts/download-previous-artifact.js')
+            await downloadPreviousArtifact({github, context})
       - name: Read Previous Coverage Report
         id: read-previous-report
         run: |
           if [ -f "./coverage-previous/coverage-summary.json" ]; then
-            echo "yes"
             previousSummaryContent=$(cat ./coverage-previous/coverage-summary.json)
             # the following lines are only required for multi line json
             previousSummaryContent="${previousSummaryContent//'%'/'%25'}"
@@ -106,9 +105,6 @@ jobs:
           script: |
             const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.read-latest.outputs.latestSummaryContent }}));
             let previousMarkdownContent = {};
-            console.log("condition 2: ", ${{ needs.read-previous.outputs.previousSummaryContent == false }})
-            console.log("condition 2: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == false)
-            console.log("conditin: ", ${{ needs.read-previous.outputs.previousSummaryContent }} != false)
             if(${{ needs.read-previous.outputs.previousSummaryContent }} != false) {
               previousMarkdownContent = JSON.parse(JSON.stringify(${{ needs.read-previous.outputs.previousSummaryContent }}))
             }
