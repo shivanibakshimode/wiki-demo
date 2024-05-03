@@ -50,7 +50,8 @@ jobs:
           else 
             echo "No previous coverage report found"
           fi
-          echo "$previousSummaryContent"
+          previousSummaryContent=""
+          echo "Yessss contentt: $previousSummaryContent"
           echo "::set-output name=previousSummaryContent::$previousSummaryContent"
       - name: Upload Latest Coverage
         uses: actions/upload-artifact@v4
@@ -59,7 +60,7 @@ jobs:
           path: coverage
 
   read-latest:
-    needs: test
+    needs: [test, read-previous]
     runs-on: ubuntu-latest
     permissions:
       contents: read
