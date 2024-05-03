@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@playwright/test": "^1.43.1",
+    "@types/node": "^20.12.7",
     "@vitest/coverage-istanbul": "^1.5.0",
     "jsdom": "^24.0.0",
     "typescript": "^5.2.2",
