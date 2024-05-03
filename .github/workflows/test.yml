@@ -55,6 +55,8 @@ jobs:
           else 
             echo "No previous coverage report found"
           fi
+          $previousSummaryContent="false"
+          echo "Yessss contentt: $previousSummaryContent"
           echo "Yessss contentt: $previousSummaryContent == null"
           echo "::set-output name=previousSummaryContent::$previousSummaryContent"
 
@@ -107,10 +109,10 @@ jobs:
             const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.read-latest.outputs.latestSummaryContent }}));
             console.log("hereeeee");
             let previousMarkdownContent = {};
-            console.log("condition 2: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == null)
-            console.log("condition 1: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == null)
-            console.log("conditin: ", ${{ needs.read-previous.outputs.previousSummaryContent }} != null)
-            if(${{ needs.read-previous.outputs.previousSummaryContent }} != null) {
+            console.log("condition 2: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == "false")
+            console.log("condition 1: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == "false")
+            console.log("conditin: ", ${{ needs.read-previous.outputs.previousSummaryContent }} != "false")
+            if(${{ needs.read-previous.outputs.previousSummaryContent }} != "false") {
               previousMarkdownContent = JSON.parse(JSON.stringify(${{ needs.read-previous.outputs.previousSummaryContent }}))
             }
 
