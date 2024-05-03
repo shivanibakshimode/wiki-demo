@@ -53,7 +53,7 @@ jobs:
             previousSummaryContent="${previousSummaryContent//$'\r'/'%0D'}"
             # end of optional handling for multi line json
           else 
-            previousSummaryContent=$(false)
+            previousSummaryContent=$("false")
             echo "No previous coverage report found"
           fi
           echo "Yessss contentt: $previousSummaryContent"
