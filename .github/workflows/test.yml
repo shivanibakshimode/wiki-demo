@@ -50,6 +50,7 @@ jobs:
           else 
             echo "No previous coverage report found"
           fi
+          echo "$previousSummaryContent"
           echo "::set-output name=previousSummaryContent::$previousSummaryContent"
       - name: Upload Latest Coverage
         uses: actions/upload-artifact@v4
