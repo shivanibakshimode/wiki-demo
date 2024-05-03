@@ -23,7 +23,6 @@ export default {
       enabled: true,
       reporter: ["text", "json-summary", "json", "html"],
       reportOnFailure: true,
-      reportsDirectory: './unit/coverage'
     },
   },
 };

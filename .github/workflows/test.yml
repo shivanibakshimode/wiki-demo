@@ -15,11 +15,14 @@ jobs:
         run: npm install
       - name: Test
         run: npx vitest --coverage.enabled true
+      - name: List Artifacts
+        run: ls -R
       - name: Upload Latest Coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-latest
-          path: coverage-latest
+          name: coverage-latest   #artifact name
+          path: coverage    #folder to upload
+          overwrite: true
       
   read-previous:
     needs: test
@@ -71,8 +74,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      # - name: Download Latest Artifacts
+      #   uses: actions/download-artifact@v4
       - name: Download Latest Artifacts
         uses: actions/download-artifact@v4
+        env:
+          WORKFLOW_FILENAME: test.yml
+          ARTIFACT_NAME: coverage-latest
+          ARTIFACT_FILENAME: coverage-latest.zip
+          UNZIP_DIRECTORY: ./coverage-latest
       - name: List Latest Artifacts
         run: ls -R
       - name: Read Latest Coverage Report
@@ -85,13 +95,14 @@ jobs:
           latestSummaryContent="${latestSummaryContent//$'\r'/'%0D'}"
           # end of optional handling for multi line json
           echo "::set-output name=latestSummaryContent::$latestSummaryContent"
-      - name: Rename latest report
-        run: mv coverage-latest coverage-previous
+      # - name: Rename latest report
+      #   run: mv coverage-latest coverage-previous
       - name: Upload Previous Coverage
         uses: actions/upload-artifact@v4
         with:
           name: coverage-previous
-          path: coverage-previous
+          path: coverage
+          overwrite: true
 
   comment:
     needs: [test, read-previous, read-latest]
