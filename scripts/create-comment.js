@@ -4,7 +4,7 @@ function addIndicator(latestValue, previousValue) {
   } else if (latestValue < previousValue) {
     return "&#x25BC;";
   }
-  return "&#x25BC;";
+  return "";
 }
 
 function addRedColor(value) {

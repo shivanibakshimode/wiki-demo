@@ -5,11 +5,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      actions: write
-    outputs:
-      previousSummaryContent: ${{ steps.read-previous-report.outputs.previousSummaryContent }}
     steps:
       - uses: actions/checkout@v4
       - name: Install Node
@@ -20,42 +15,54 @@ jobs:
         run: npm install
       - name: Test
         run: npx vitest --coverage.enabled true
-      - name: Download Previous Artifacts
-        uses: actions/github-script@v6
-        env:
-          WORKFLOW_FILENAME: test.yml
-          ARTIFACT_NAME: coverage-previous
-          ARTIFACT_FILENAME: coverage-previous.zip
-          UNZIP_DIRECTORY: ./coverage-previous
-        with:
-          script: |
-            const { downloadPreviousArtifact } = await import('${{ github.workspace }}/scripts/download-previous-artifact.js')
-            await downloadPreviousArtifact({github, context, core})
+      
+  read-previous:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+    outputs:
+      previousSummaryContent: ${{ steps.read-previous-report.outputs.previousSummaryContent }}
+    steps:
+      # - name: Download Previous Artifacts
+      #   uses: actions/github-script@v6
+      #   env:
+      #     WORKFLOW_FILENAME: test.yml
+      #     ARTIFACT_NAME: coverage-previous
+      #     ARTIFACT_FILENAME: coverage-previous.zip
+      #     UNZIP_DIRECTORY: ./coverage-previous
+      #   with:
+      #     script: |
+      #       const { downloadPreviousArtifact } = await import('${{ github.workspace }}/scripts/download-previous-artifact.js')
+      #       await downloadPreviousArtifact({github, context})
       - name: Read Previous Coverage Report
         id: read-previous-report
         run: |
           if [ -f "./coverage-previous/coverage-summary.json" ]; then
+            echo "yes"
             previousSummaryContent=$(cat ./coverage-previous/coverage-summary.json)
             # the following lines are only required for multi line json
             previousSummaryContent="${previousSummaryContent//'%'/'%25'}"
             previousSummaryContent="${previousSummaryContent//$'\n'/'%0A'}"
             previousSummaryContent="${previousSummaryContent//$'\r'/'%0D'}"
             # end of optional handling for multi line json
-            echo "::set-output name=previousSummaryContent::$previousSummaryContent"
           else 
             echo "No previous coverage report found"
           fi
+          echo "::set-output name=previousSummaryContent::$previousSummaryContent"
       - name: Upload Latest Coverage
         uses: actions/upload-artifact@v4
         with:
           name: coverage-latest
           path: coverage
 
-  report:
+  read-latest:
     needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      actions: write
     outputs:
       latestSummaryContent: ${{ steps.read-latest-report.outputs.latestSummaryContent }}
     steps:
@@ -73,7 +80,7 @@ jobs:
           latestSummaryContent="${latestSummaryContent//$'\r'/'%0D'}"
           # end of optional handling for multi line json
           echo "::set-output name=latestSummaryContent::$latestSummaryContent"
-      - name: Copy report
+      - name: Rename latest report
         run: mv coverage-latest coverage-previous
       - name: Upload Previous Coverage
         uses: actions/upload-artifact@v4
@@ -82,7 +89,7 @@ jobs:
           path: coverage
 
   comment:
-    needs: [test, report]
+    needs: [test, read-previous, read-latest]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -96,9 +103,16 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.report.outputs.latestSummaryContent }}));
-            const previousMarkdownContent = JSON.parse(JSON.stringify(${{ needs.test.outputs.previousSummaryContent }}));
+            const latestMarkdownContent = JSON.parse(JSON.stringify(${{ needs.read-latest.outputs.latestSummaryContent }}));
+            console.log("hereeeee");
+            let previousMarkdownContent = {};
+            console.log("condition 2: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == "")
+            console.log("condition 1: ", ${{ needs.read-previous.outputs.previousSummaryContent }} == true)
+            console.log("conditin: ", ${{ needs.read-previous.outputs.previousSummaryContent }} != false)
+            if(${{ needs.read-previous.outputs.previousSummaryContent }} != false) {
+              previousMarkdownContent = JSON.parse(JSON.stringify(${{ needs.read-previous.outputs.previousSummaryContent }}))
+            }
 
+            console.log("previousMarkdownContent in scripttt: ", previousMarkdownContent);
             const { createComment } = await import('${{ github.workspace }}/scripts/create-comment.js');
             await createComment({github, context, latestMarkdownContent, previousMarkdownContent});
-
